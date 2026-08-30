@@ -178,7 +178,7 @@ button, .btn-menu, .icon-btn, .option-btn, .quiz-opt, .match-item, .lesson-pick 
 </div>
 </header>
 <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
-<div class="sound-banner" id="soundBanner" onclick="unlockAudioEngine();playSound('fanfare');">🔊 Tap here once to enable and TEST sound</div>
+<div class="sound-banner" id="soundBanner" onclick="unlockAudioEngine();playSound('fanfare');setTimeout(function(){narrateText('Sound is on. Clear English reading is ready.',null,function(){});},300);">🔊 Tap here once to enable clear English voice</div>
 <audio id="voicePlayer" playsinline webkit-playsinline preload="auto"></audio>
 <audio id="fxPlayer" playsinline webkit-playsinline preload="auto"></audio>
 
@@ -251,8 +251,8 @@ button, .btn-menu, .icon-btn, .option-btn, .quiz-opt, .match-item, .lesson-pick 
 <div class="section-header"><div class="section-title">ℹ️ Instructions</div><button class="back-btn" onclick="showScreen('homeScreen')">Back</button></div>
 <div class="content-box"><div class="instructions-list">
 <ul>
-<li>Tap the orange banner or <b>Test Sound</b> once, then raise device volume.</li>
-<li><b>Read Lesson</b> reads the paragraph in clear English (device English voice). Words highlight while they are spoken.</li>
+<li>Tap the orange banner or <b>Test Sound</b> once, then raise device volume. English Text-to-Speech on the device is used for clear reading.</li>
+<li><b>Read Lesson</b> reads each paragraph in clear English. Words highlight while spoken. Use the blue 🔊 on every paragraph.</li>
 <li><b>Activities</b> include every textbook task (map list, notes, discussions, comparison tables).</li>
 <li><b>Sources &amp; Enquiry</b> trains you to read travelogues, obituaries and memoirs like a historian.</li>
 <li><b>Unit Question Paper</b> can be printed or saved as PDF for exam practice.</li>
@@ -376,10 +376,13 @@ function startKeepAlive(){
     keepAliveOsc.start();
   }catch(e){ keepAliveOsc=null; }
 }
+let cachedEnglishVoice=null;
+let voicesReady=false;
+
 function unlockAudioEngine(){
   audioUnlocked=true;
   const b=document.getElementById('soundBanner');
-  if(b){b.classList.add('on');b.classList.remove('show');b.innerText='🔊 Sound is ON — in-app narrator is ready';}
+  if(b){b.classList.add('on');b.classList.remove('show');b.innerText='🔊 Sound is ON — clear English voice is ready';}
   const ctx=ensureCtx();
   if(ctx && ctx.state==='suspended' && ctx.resume) ctx.resume().catch(function(){});
   startKeepAlive();
@@ -389,7 +392,17 @@ function unlockAudioEngine(){
     if(!el) return;
     try{ el.muted=false; el.volume=1; const pr=el.play(); if(pr&&pr.catch) pr.catch(function(){}); el.pause(); }catch(e){}
   });
-  playSound('click');
+  /* Wake speech engine inside user gesture (needed in WebView / internal apps) */
+  if(hasSpeech()){
+    try{
+      window.speechSynthesis.cancel();
+      const wake=new SpeechSynthesisUtterance(' ');
+      wake.volume=0.01; wake.rate=2; wake.lang='en-IN';
+      window.speechSynthesis.speak(wake);
+      setTimeout(function(){ try{ window.speechSynthesis.cancel(); }catch(e){} }, 30);
+    }catch(e){}
+    warmVoices();
+  }
 }
 function showSoundBannerIfNeeded(){
   const b=document.getElementById('soundBanner');
@@ -424,82 +437,58 @@ function playSound(type){
   else if(type==='fanfare') playInternalWav(concatSamples([toneSamples(523,.2,.28),toneSamples(659,.2,.28),toneSamples(784,.22,.28),toneSamples(1046,.3,.3)]),SR,'fxPlayer');
   else if(type==='pop') playInternalWav(toneSamples(880,.08,.24,'square'),SR,'fxPlayer');
 }
-const VFORM={a:[760,1180],e:[530,1840],i:[300,2200],o:[570,920],u:[380,800],y:[350,1800]};
-function wordToSamples(word){
-  const w=String(word).toLowerCase().replace(/[^a-z0-9]/g,'');
-  if(!w) return new Float32Array(Math.floor(SR*0.08));
-  const parts=[];
-  for(let i=0;i<w.length;i++){
-    const ch=w[i];
-    const form=VFORM[ch];
-    const dur=form?0.095:0.05;
-    const n=Math.floor(SR*dur);
-    const buf=new Float32Array(n);
-    const f1=form?form[0]:(180+ch.charCodeAt(0)%90);
-    const f2=form?form[1]:f1*2.1;
-    for(let s=0;s<n;s++){
-      const env=Math.min(1,s/70)*Math.min(1,(n-s)/90);
-      buf[s]=(Math.sin(2*Math.PI*f1*s/SR)*0.62+Math.sin(2*Math.PI*f2*s/SR)*0.38)*env;
-    }
-    parts.push(buf);
-  }
-  parts.push(new Float32Array(Math.floor(SR*0.03)));
-  return concatSamples(parts);
-}
 function hasSpeech(){
   return typeof window!=='undefined' && 'speechSynthesis' in window && typeof SpeechSynthesisUtterance!=='undefined';
 }
 function pickEnglishVoice(){
   if(!hasSpeech()) return null;
   const voices=window.speechSynthesis.getVoices()||[];
-  if(!voices.length) return null;
+  if(!voices.length) return cachedEnglishVoice;
   const score=function(v){
     const n=(v.name||'')+' '+(v.lang||'');
-    if(/en-IN|Indian|Ravi|Heera|Google हिन्दी|English India/i.test(n)) return 5;
-    if(/en-GB|UK|Daniel|Female.*UK/i.test(n)) return 4;
-    if(/en-US|US English|Samantha|Google US/i.test(n)) return 3;
-    if(/^en/i.test(v.lang||'')) return 2;
+    if(/en-IN|English \(India\)|Ravi|Heera|Google UK English Female|Google UK English Male/i.test(n)) return 6;
+    if(/en-GB|British|Daniel|Kate|Serena|Google UK/i.test(n)) return 5;
+    if(/en-US|US English|Samantha|Alex|Google US|Microsoft.*English/i.test(n)) return 4;
+    if(/^en[-_]/i.test(v.lang||'') || /English/i.test(n)) return 3;
     return 0;
   };
-  return voices.slice().sort(function(a,b){return score(b)-score(a);})[0]||voices[0];
+  const sorted=voices.slice().sort(function(a,b){return score(b)-score(a);});
+  cachedEnglishVoice=sorted[0]||voices[0]||null;
+  voicesReady=!!cachedEnglishVoice;
+  return cachedEnglishVoice;
 }
 function warmVoices(){
   if(!hasSpeech()) return;
-  try{ window.speechSynthesis.getVoices(); }catch(e){}
-  if(typeof window.speechSynthesis.addEventListener==='function'){
-    window.speechSynthesis.addEventListener('voiceschanged', function(){ pickEnglishVoice(); });
+  try{
+    const list=window.speechSynthesis.getVoices()||[];
+    if(list.length) pickEnglishVoice();
+  }catch(e){}
+  if(typeof window.speechSynthesis.onvoiceschanged!=='undefined'){
+    window.speechSynthesis.onvoiceschanged=function(){ pickEnglishVoice(); };
   }
+  if(typeof window.speechSynthesis.addEventListener==='function'){
+    try{ window.speechSynthesis.addEventListener('voiceschanged', function(){ pickEnglishVoice(); }); }catch(e){}
+  }
+  /* Android WebView sometimes loads voices late — poll briefly */
+  let tries=0;
+  const poll=setInterval(function(){
+    tries++;
+    const v=window.speechSynthesis.getVoices()||[];
+    if(v.length || tries>25){ clearInterval(poll); if(v.length) pickEnglishVoice(); }
+  }, 200);
 }
 function stopNarrator(full){
   narratorStop=true;
-  if(narratorTimer){clearTimeout(narratorTimer);narratorTimer=null;}
+  if(narratorTimer){ try{ clearInterval(narratorTimer); }catch(e){} try{ clearTimeout(narratorTimer); }catch(e){} narratorTimer=null; }
   if(full!==false) state.readingAll=false;
   if(activeSource){ try{ activeSource.stop(0); }catch(e){} activeSource=null; }
   if(hasSpeech()){
     try{ window.speechSynthesis.cancel(); }catch(e){}
   }
   const v=document.getElementById('voicePlayer');
-  if(v){try{v.pause();}catch(e){}}
+  if(v){try{v.pause(); v.removeAttribute('src');}catch(e){}}
   document.querySelectorAll('.story-para.reading').forEach(e=>e.classList.remove('reading'));
   document.querySelectorAll('.word-hl').forEach(e=>{const t=e.textContent; e.replaceWith(document.createTextNode(t));});
-}
-function buildSpeech(text){
-  const words=String(text).split(/(\s+)/).filter(s=>s.length);
-  const parts=[];
-  const marks=[];
-  let t=0;
-  for(let i=0;i<words.length;i++){
-    const w=words[i];
-    if(/^\s+$/.test(w)){
-      const sil=new Float32Array(Math.floor(SR*0.04));
-      parts.push(sil); t+=sil.length/SR; continue;
-    }
-    marks.push({i:i, t:t});
-    const sm=wordToSamples(w);
-    parts.push(sm);
-    t+=sm.length/SR;
-  }
-  return {words:words, marks:marks, samples:parts.length?concatSamples(parts):toneSamples(440,.2,.5), duration:t};
 }
 function wrapWords(paraEl, words){
   if(!paraEl) return;
@@ -513,7 +502,10 @@ function highlightWord(paraEl, index){
   if(!paraEl) return;
   paraEl.querySelectorAll('.word-hl').forEach(e=>e.classList.remove('word-hl'));
   const span=paraEl.querySelector('.nw[data-i="'+index+'"]');
-  if(span) span.classList.add('word-hl');
+  if(span){
+    span.classList.add('word-hl');
+    try{ span.scrollIntoView({block:'nearest', behavior:'smooth'}); }catch(e){}
+  }
 }
 function wordIndexAtChar(words, charIndex){
   let pos=0;
@@ -524,30 +516,85 @@ function wordIndexAtChar(words, charIndex){
   }
   return words.length-1;
 }
+/* Split long text into sentence chunks so speech never cuts off in WebView */
+function splitIntoChunks(text){
+  const t=String(text||'').trim();
+  if(!t) return [];
+  if(t.length<=180) return [t];
+  const parts=t.match(/[^.!?]+[.!?]+[\s]*/g) || [t];
+  const chunks=[];
+  let buf='';
+  parts.forEach(function(p){
+    if((buf+p).length>220 && buf){ chunks.push(buf.trim()); buf=p; }
+    else buf+=p;
+  });
+  if(buf.trim()) chunks.push(buf.trim());
+  return chunks.length?chunks:[t];
+}
 function speakWithTTS(text, paraEl, onend){
-  const words=String(text).split(/(\s+)/).filter(s=>s.length);
+  const full=String(text||'').trim();
+  if(!full){ if(onend) onend(false); return; }
+  const words=full.split(/(\s+)/).filter(s=>s.length);
   wrapWords(paraEl, words);
-  const u=new SpeechSynthesisUtterance(String(text));
-  u.lang='en-IN';
-  u.rate=0.92;
-  u.pitch=1;
-  u.volume=1;
-  const voice=pickEnglishVoice();
-  if(voice){ u.voice=voice; if(voice.lang) u.lang=voice.lang; }
-  u.onboundary=function(ev){
-    if(narratorStop) return;
-    const idx=(typeof ev.charIndex==='number')?wordIndexAtChar(words, ev.charIndex):null;
-    if(idx!=null && !/^\s+$/.test(words[idx]||'')) highlightWord(paraEl, idx);
-  };
-  u.onend=function(){
+  const chunks=splitIntoChunks(full);
+  let ci=0;
+  let charOffset=0;
+  /* Prevent Chrome/WebView from pausing speech after ~15s */
+  if(narratorTimer){ clearInterval(narratorTimer); narratorTimer=null; }
+  narratorTimer=setInterval(function(){
+    if(narratorStop){ clearInterval(narratorTimer); narratorTimer=null; return; }
+    try{
+      if(window.speechSynthesis.speaking && window.speechSynthesis.paused){
+        window.speechSynthesis.resume();
+      }
+    }catch(e){}
+  }, 4000);
+
+  function finish(ok){
+    if(narratorTimer){ clearInterval(narratorTimer); narratorTimer=null; }
     if(paraEl) paraEl.classList.remove('reading');
-    if(onend) onend(!narratorStop);
-  };
-  u.onerror=function(){
-    if(paraEl) paraEl.classList.remove('reading');
-    if(onend) onend(false);
-  };
-  window.speechSynthesis.speak(u);
+    if(onend) onend(ok);
+  }
+
+  function speakNext(){
+    if(narratorStop){ finish(false); return; }
+    if(ci>=chunks.length){ finish(true); return; }
+    const chunk=chunks[ci];
+    const u=new SpeechSynthesisUtterance(chunk);
+    u.lang='en-IN';
+    u.rate=0.9;
+    u.pitch=1.0;
+    u.volume=1.0;
+    const voice=pickEnglishVoice();
+    if(voice){
+      try{ u.voice=voice; }catch(e){}
+      if(voice.lang) u.lang=voice.lang;
+    }
+    u.onboundary=function(ev){
+      if(narratorStop || !paraEl) return;
+      if(typeof ev.charIndex==='number'){
+        const idx=wordIndexAtChar(words, charOffset+ev.charIndex);
+        if(idx!=null && !/^\s+$/.test(words[idx]||'')) highlightWord(paraEl, idx);
+      }
+    };
+    u.onend=function(){
+      charOffset+=chunk.length+1;
+      ci++;
+      if(!narratorStop) setTimeout(speakNext, 50);
+    };
+    u.onerror=function(){
+      charOffset+=chunk.length+1;
+      ci++;
+      if(!narratorStop) setTimeout(speakNext, 50);
+    };
+    try{
+      if(window.speechSynthesis.paused) window.speechSynthesis.resume();
+      window.speechSynthesis.speak(u);
+    }catch(e){
+      finish(false);
+    }
+  }
+  speakNext();
 }
 function narrateText(text, paraEl, onend){
   const keepEnabled=state.audioEnabled;
@@ -559,36 +606,50 @@ function narrateText(text, paraEl, onend){
   if(!state.audioEnabled){ if(onend) onend(false); return; }
   unlockAudioEngine();
   warmVoices();
+  const clean=String(text||'').replace(/\s+/g,' ').trim();
+  if(!clean){ if(onend) onend(false); return; }
+
   if(hasSpeech()){
-    try{ if(window.speechSynthesis.speaking || window.speechSynthesis.pending) window.speechSynthesis.cancel(); }catch(e){}
-    speakWithTTS(text, paraEl, onend);
+    try{ window.speechSynthesis.cancel(); }catch(e){}
+    /* Ensure voices loaded before first speak (important for internal WebView) */
+    const start=function(){
+      if(narratorStop){ if(onend) onend(false); return; }
+      speakWithTTS(clean, paraEl, onend);
+    };
+    const voices=window.speechSynthesis.getVoices()||[];
+    if(voices.length || voicesReady){
+      start();
+    } else {
+      let waited=0;
+      const waitVoices=setInterval(function(){
+        waited++;
+        const v=window.speechSynthesis.getVoices()||[];
+        if(v.length || waited>15){
+          clearInterval(waitVoices);
+          pickEnglishVoice();
+          start();
+        }
+      }, 100);
+    }
     return;
   }
-  const built=buildSpeech(text);
-  wrapWords(paraEl, built.words);
-  playSamplesNow(built.samples, 'voicePlayer');
-  let m=0;
-  function tickHl(){
-    if(narratorStop){ if(onend) onend(false); return; }
-    if(m>=built.marks.length){
-      if(paraEl) paraEl.classList.remove('reading');
-      if(onend) onend(true);
-      return;
-    }
-    highlightWord(paraEl, built.marks[m].i);
-    const nextT=(m+1<built.marks.length)?built.marks[m+1].t:built.duration;
-    const wait=Math.max(80, (nextT-built.marks[m].t)*1000);
-    m++;
-    narratorTimer=setTimeout(tickHl, wait);
+  /* No system TTS: show clear message instead of noisy synthetic speech */
+  if(paraEl){
+    paraEl.classList.add('reading');
+    const p=paraEl.querySelector('p');
+    if(p) p.innerHTML='<span style="color:#C62828">⚠️ Enable English Text-to-Speech in device settings, then tap again.</span>';
   }
-  tickHl();
+  if(onend) onend(false);
 }
 function speakText(text,onend){ narrateText(text, null, onend); }
 function toggleAudio(){
   state.audioEnabled=!state.audioEnabled;
   document.getElementById('btnAudioToggle').innerText=state.audioEnabled?'🔊':'🔇';
   if(!state.audioEnabled) stopNarrator();
-  else unlockAudioEngine();
+  else {
+    unlockAudioEngine();
+    playSound('click');
+  }
 }
 function toggleFullscreen(){
   if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(()=>{});}
@@ -932,40 +993,72 @@ function renderRead(body,topicId){
   const lines=READ_CONTENTS[topicId]||[];
   const T=TOPICS.find(x=>x.id===topicId);
   body.innerHTML=`<div class="story-title-wrap"><span class="story-title">${T?T.title:''}</span></div>
-  <button class="read-all-btn" id="readAllBtn">🔊 Read All / Stop</button>
-  <button class="read-all-btn" type="button" id="testSoundBtn" style="background:linear-gradient(135deg,#FF8F00,#E65100);margin-left:8px">🔈 Test Sound</button>
-  <div class="note-box">Tap <b>Test Sound</b>, then the blue 🔊. The paragraph is read in clear English. Turn the device volume up. If no voice is heard, install/enable English Text-to-Speech in phone settings.</div>
+  <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:10px">
+  <button class="read-all-btn" id="readAllBtn" type="button">🔊 Read All / Stop</button>
+  <button class="read-all-btn" type="button" id="testSoundBtn" style="background:linear-gradient(135deg,#FF8F00,#E65100)">🔈 Test Sound</button>
+  </div>
+  <div class="note-box">1) Tap <b>Test Sound</b> once (device volume up). 2) Tap the blue 🔊 on any paragraph for clear English reading. Works with device Text-to-Speech (English).</div>
   <div id="storyParas"></div>`;
   const paras=document.getElementById('storyParas');
   lines.forEach((line,idx)=>{
     const div=document.createElement('div');
     div.className='story-para';
     div.id='para'+idx;
-    div.innerHTML=`<p>${line}</p><button class="mini-play" data-idx="${idx}">🔊</button>`;
+    div.innerHTML=`<p>${line}</p><button type="button" class="mini-play" data-idx="${idx}" aria-label="Read paragraph">🔊</button>`;
     paras.appendChild(div);
-    div.querySelector('.mini-play').onclick=function(){
+    const btn=div.querySelector('.mini-play');
+    btn.addEventListener('click', function(ev){
+      ev.preventDefault();
+      ev.stopPropagation();
+      playSound('click');
       unlockAudioEngine();
+      state.readingAll=false;
       narrateText(line, div, function(){});
-    };
+    });
   });
   const testBtn=document.getElementById('testSoundBtn');
-  if(testBtn) testBtn.onclick=function(){
+  if(testBtn) testBtn.addEventListener('click', function(ev){
+    ev.preventDefault();
     unlockAudioEngine();
     playSound('fanfare');
-    narrateText('Sound is working. This is the Medieval India lesson.', null, function(){});
-  };
-  document.getElementById('readAllBtn').onclick=function(){
+    setTimeout(function(){
+      narrateText('Sound is working correctly. This is the clear English narrator for Medieval India.', null, function(){});
+    }, 350);
+  });
+  const readAllBtn=document.getElementById('readAllBtn');
+  readAllBtn.addEventListener('click', function(ev){
+    ev.preventDefault();
     unlockAudioEngine();
-    if(state.readingAll){stopNarrator(); this.innerText='🔊 Read All / Stop'; return;}
-    state.readingAll=true; this.innerText='⏹ Stop reading';
-    const allText=lines.join(' ');
-    const first=document.getElementById('para0');
-    narrateText(allText, first, function(){
-      state.readingAll=false;
-      const b=document.getElementById('readAllBtn');
-      if(b) b.innerText='🔊 Read All / Stop';
-    });
-  };
+    if(state.readingAll){
+      stopNarrator();
+      this.innerText='🔊 Read All / Stop';
+      return;
+    }
+    state.readingAll=true;
+    this.innerText='⏹ Stop reading';
+    /* Read paragraph by paragraph for clear, reliable TTS in apps */
+    let pi=0;
+    function readNextPara(){
+      if(!state.readingAll || narratorStop || pi>=lines.length){
+        state.readingAll=false;
+        const b=document.getElementById('readAllBtn');
+        if(b) b.innerText='🔊 Read All / Stop';
+        return;
+      }
+      const div=document.getElementById('para'+pi);
+      const text=lines[pi];
+      pi++;
+      narrateText(text, div, function(ok){
+        if(state.readingAll && !narratorStop) setTimeout(readNextPara, 200);
+        else {
+          state.readingAll=false;
+          const b=document.getElementById('readAllBtn');
+          if(b) b.innerText='🔊 Read All / Stop';
+        }
+      });
+    }
+    readNextPara();
+  });
 }
 function renderReadContent(body,topicId){ renderRead(body,topicId); }
 
@@ -1015,9 +1108,14 @@ function renderLearnContent(body,topicId){
     const card=document.createElement('div');
     card.className='word-card';
     card.innerHTML=`<div class="card-emoji">📜</div><div class="word-eng">${item.word}</div><div class="word-meaning">${item.meaning}</div><button class="replay-btn">🔊 Listen</button>`;
-    const play=()=>{unlockAudioEngine();narrateText(item.word+'. '+item.meaning,null,function(){});playSound('click');};
-    card.onclick=play;
-    card.querySelector('.replay-btn').onclick=function(e){e.stopPropagation();play();};
+    const play=function(e){
+      if(e){ e.preventDefault(); e.stopPropagation(); }
+      playSound('click');
+      unlockAudioEngine();
+      narrateText(item.word+'. '+item.meaning, null, function(){});
+    };
+    card.addEventListener('click', play);
+    card.querySelector('.replay-btn').addEventListener('click', play);
     grid.appendChild(card);
   });
 }
