@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Medieval India - STD 7 Social Science Unit 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&family=Anek+Malayalam:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#8B2E2E;--secondary:#C62828;--accent:#FFC107;--blue:#1565C0;--purple:#6A1B9A;--teal:#00695C;--gold:#C9A227;--shadow:0 8px 20px rgba(0,0,0,.15);--radius:20px}
+*{box-sizing:border-box;user-select:none;-webkit-user-select:none;margin:0;padding:0}
+textarea,input,.selectable{user-select:text;-webkit-user-select:text}
+body{background:linear-gradient(180deg,#FBE9E7 0%,#FFF8E1 38%,#EFEBE9 70%);min-height:100vh;overflow-x:hidden;color:#263238;font-family:'Quicksand','Segoe UI',sans-serif}
+h1,h2,h3{font-family:'Baloo 2',cursive}
+.ml{font-family:'Anek Malayalam',sans-serif;font-weight:600}
+#app{position:relative;z-index:1;max-width:1050px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;padding:15px}
+header{background:rgba(255,255,255,.97);padding:12px 20px;border-radius:var(--radius);box-shadow:var(--shadow);display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;flex-wrap:wrap;gap:10px}
+.logo-area{display:flex;align-items:center;gap:10px;cursor:pointer}
+.logo-area h1{font-size:1.15rem;color:var(--primary);font-weight:800}
+.logo-area .sub{font-size:.82rem;color:#5D4037}
+.logo-area span{font-size:.75rem;background:var(--accent);color:#333;padding:3px 10px;border-radius:12px;font-weight:bold}
+.stats-bar{display:flex;align-items:center;gap:15px;background:#FFF9C4;padding:8px 16px;border-radius:30px;border:2px solid #FBC02D;font-weight:bold;font-size:1.05rem}
+.stat-item{display:flex;align-items:center;gap:5px}
+.controls{display:flex;gap:8px}
+.icon-btn{background:#fff;border:2px solid #E0E0E0;width:40px;height:40px;border-radius:50%;display:flex;justify-content:center;align-items:center;font-size:1.1rem;cursor:pointer;box-shadow:0 3px 6px rgba(0,0,0,.1)}
+.icon-btn:hover{transform:scale(1.08)}
+.progress-container{width:100%;background:rgba(255,255,255,.6);height:10px;border-radius:10px;overflow:hidden;margin-bottom:15px;box-shadow:inset 0 2px 4px rgba(0,0,0,.1)}
+.progress-bar{height:100%;width:0%;background:linear-gradient(90deg,#C62828,#FF8A65);transition:width .4s ease}
+.screen{display:none;flex-direction:column;align-items:center;width:100%;flex:1;animation:fadeIn .3s ease-in-out}
+.screen.active{display:flex}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.home-card{background:rgba(255,255,255,.95);border-radius:25px;padding:28px 20px;text-align:center;box-shadow:var(--shadow);width:100%;max-width:760px;margin:auto;border:4px solid #fff}
+.main-title{color:#8B2E2E;font-size:1.75rem;margin-bottom:4px}
+.sub-title{color:#BF360C;font-size:1.12rem;margin-bottom:8px;font-weight:700}
+.author-tag{background:#FCE4EC;color:#880E4F;display:inline-block;padding:4px 16px;border-radius:20px;font-size:.88rem;margin-bottom:18px;font-weight:bold}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;width:100%}
+.btn-menu{padding:16px 16px;border:none;border-radius:20px;font-size:.98rem;font-weight:bold;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 6px 0 rgba(0,0,0,.2);text-shadow:1px 1px 2px rgba(0,0,0,.3);transition:all .2s;font-family:'Baloo 2',cursive}
+.btn-menu:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.2)}
+.b1{background:linear-gradient(135deg,#C62828,#8E0000)}.b2{background:linear-gradient(135deg,#EF6C00,#E65100)}
+.b3{background:linear-gradient(135deg,#1565C0,#0D47A1)}.b4{background:linear-gradient(135deg,#6A1B9A,#4A148C)}
+.b5{background:linear-gradient(135deg,#00695C,#004D40)}.b6{background:linear-gradient(135deg,#F9A825,#F57F17)}
+.b7{background:linear-gradient(135deg,#5D4037,#3E2723)}.b8{background:linear-gradient(135deg,#607D8B,#455A64)}
+.b9{background:linear-gradient(135deg,#3949AB,#1A237E)}.b10{background:linear-gradient(135deg,#AD1457,#880E4F);border:2px solid #F48FB1}
+.b11{background:linear-gradient(135deg,#8D6E63,#4E342E)}.b13{background:linear-gradient(135deg,#00897B,#00695C)}
+.b14{background:linear-gradient(135deg,#FF8F00,#E65100)}.b15{background:linear-gradient(135deg,#5C6BC0,#283593)}
+.b16{background:linear-gradient(135deg,#D32F2F,#B71C1C)}
+.lesson-pick{background:#fff;border:3px solid #EF9A9A;border-radius:18px;padding:16px 20px;margin-bottom:12px;cursor:pointer;display:flex;align-items:center;gap:14px;box-shadow:0 4px 12px rgba(0,0,0,.08);transition:all .2s;width:100%;max-width:560px}
+.lesson-pick:hover{border-color:#C62828;background:#FFEBEE;transform:translateY(-3px)}
+.lesson-pick .lp-emoji{font-size:2.2rem}
+.lesson-pick .lp-title{font-size:1.08rem;font-weight:800;color:#8B2E2E;font-family:'Baloo 2',cursive}
+.lesson-pick .lp-sub{font-size:.82rem;color:#546E7A;font-family:'Anek Malayalam',sans-serif}
+.section-header{width:100%;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;background:#fff;padding:12px 18px;border-radius:15px;box-shadow:var(--shadow);flex-wrap:wrap;gap:10px}
+.section-title{font-size:1.08rem;color:var(--primary);font-weight:800;display:flex;align-items:center;gap:8px;font-family:'Baloo 2',cursive}
+.back-btn{background:linear-gradient(135deg,#607D8B,#546E7A);color:#fff;border:none;padding:8px 20px;border-radius:20px;font-weight:bold;cursor:pointer}
+.content-box{background:rgba(255,255,255,.97);border-radius:22px;padding:22px;box-shadow:var(--shadow);width:100%;max-width:880px;margin:0 auto 20px;border:3px solid #fff}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:16px;width:100%;padding-bottom:16px}
+.word-card{background:#fff;border-radius:20px;padding:14px;text-align:center;box-shadow:var(--shadow);border:3px solid #fff;transition:all .3s;cursor:pointer;display:flex;flex-direction:column;align-items:center}
+.word-card:hover{transform:translateY(-6px);border-color:var(--accent)}
+.card-emoji{font-size:2.6rem;margin-bottom:6px}
+.word-eng{font-size:1.02rem;margin-bottom:4px;font-weight:800;color:#8B2E2E;font-family:'Baloo 2',cursive}
+.word-meaning{font-size:.98rem;color:#333;margin-bottom:8px;line-height:1.5}
+.replay-btn{background:#E8EAF6;color:#3F51B5;border:none;padding:5px 12px;border-radius:15px;font-size:.82rem;font-weight:bold;cursor:pointer}
+.story-title-wrap{text-align:center;width:100%;margin-bottom:14px}
+.story-title{text-align:center;font-size:1.28rem;margin-bottom:12px;background:linear-gradient(90deg,#FFCCBC,#EF9A9A);display:inline-block;padding:8px 24px;border-radius:30px;color:#6A1B1B!important;font-family:'Baloo 2',cursive}
+.story-para{background:#FFEBEE;border-left:5px solid var(--primary);padding:12px 16px;border-radius:14px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.story-para p{font-size:1.05rem;line-height:1.8;flex:1;min-width:220px}
+.story-para.reading{background:#FFF8E1;border-left-color:#FF8F00;box-shadow:0 0 0 2px #FFE082}
+.word-hl{background:#FFECB3;border-radius:4px;padding:0 2px}
+.mini-play{background:var(--blue);color:#fff;border:none;width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:1.05rem;flex-shrink:0}
+.read-all-btn{background:linear-gradient(135deg,#C62828,#8B2E2E);color:#fff;border:none;padding:12px 28px;border-radius:25px;font-size:1.02rem;font-weight:bold;cursor:pointer;margin-bottom:16px;box-shadow:0 4px 10px rgba(198,40,40,.4);font-family:'Baloo 2',cursive}
+.activity-block{background:#FFF8E1;border:2px solid #FFE082;border-radius:18px;padding:18px;margin-bottom:18px;width:100%}
+.activity-heading{color:#BF360C;font-size:1.15rem;margin-bottom:12px;font-weight:800;font-family:'Baloo 2',cursive}
+.activity-sub{font-size:1.02rem;color:#455A64;margin-bottom:10px;line-height:1.65}
+.check-btn{background:var(--primary);color:#fff;border:none;padding:8px 22px;border-radius:20px;font-weight:bold;cursor:pointer;margin-top:8px;font-family:'Baloo 2',cursive}
+.result-msg{font-weight:bold;margin-top:8px;font-size:1.02rem}
+.model-answer-box{background:#F3E5F5;border:2px solid #CE93D8;border-radius:14px;padding:14px 16px;margin-top:10px;font-size:1.02rem;line-height:1.75;display:none}
+.reveal-model-btn{background:var(--purple);color:#fff;border:none;padding:8px 18px;border-radius:18px;font-size:.88rem;cursor:pointer;margin-top:6px;font-family:'Baloo 2',cursive;font-weight:bold}
+.diary-area{width:100%;min-height:88px;border:2px dashed #90A4AE;border-radius:12px;padding:10px 14px;font-size:1rem;font-family:'Quicksand',sans-serif;margin-bottom:10px;resize:vertical;user-select:text;-webkit-user-select:text}
+.game-box{background:rgba(255,255,255,.95);border-radius:25px;padding:24px;box-shadow:var(--shadow);width:100%;max-width:750px;margin:0 auto;display:flex;flex-direction:column;align-items:center;border:4px solid #fff}
+.game-instruction{font-size:1.08rem;color:#37474F;margin-bottom:18px;text-align:center;background:#FCE4EC;padding:8px 18px;border-radius:20px;font-weight:bold;font-family:'Baloo 2',cursive;line-height:1.5}
+.options-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;width:100%;max-width:500px}
+.option-btn{background:#fff;border:3px solid #EF9A9A;padding:12px;border-radius:18px;font-size:1.02rem;font-weight:bold;color:#8B2E2E!important;cursor:pointer;box-shadow:0 4px 0 #E57373;text-align:center}
+.option-btn:hover{background:#FFEBEE}
+.option-btn.correct{background:#C8E6C9!important;border-color:#4CAF50!important;color:#2E7D32!important;box-shadow:0 4px 0 #388E3C!important}
+.option-btn.wrong{background:#FFCDD2!important;border-color:#F44336!important;color:#C62828!important;box-shadow:0 4px 0 #D32F2F!important}
+.quiz-q{background:#fff;border-radius:16px;padding:14px 18px;margin-bottom:14px;box-shadow:0 3px 10px rgba(0,0,0,.08);border-left:5px solid var(--blue)}
+.quiz-q .qtext{font-size:1.05rem;margin-bottom:10px;font-weight:bold;line-height:1.5}
+.quiz-opts{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.quiz-opt{background:#F5F5F5;border:2px solid #E0E0E0;border-radius:12px;padding:10px;cursor:pointer;text-align:center;font-size:.98rem}
+.quiz-opt.picked{border-color:var(--blue);background:#E3F2FD}
+.quiz-opt.correct-ans{border-color:#4CAF50;background:#C8E6C9}
+.quiz-opt.wrong-ans{border-color:#F44336;background:#FFCDD2}
+.submit-quiz-btn{background:linear-gradient(135deg,#C62828,#8B2E2E);color:#fff;border:none;padding:14px 36px;border-radius:25px;font-size:1.08rem;font-weight:bold;cursor:pointer;margin-top:10px;box-shadow:0 4px 10px rgba(198,40,40,.4);font-family:'Baloo 2',cursive}
+.quiz-score-box{background:#FFF9C4;border:2px solid #FBC02D;border-radius:18px;padding:16px;text-align:center;font-size:1.15rem;font-weight:bold;margin-bottom:16px}
+table.vocab-table,table.data-table{width:100%;border-collapse:collapse;margin:10px 0}
+.vocab-table th,.data-table th{background:var(--primary);color:#fff;padding:9px;font-size:.95rem}
+.vocab-table td,.data-table td{padding:9px;border-bottom:1px solid #eee;font-size:.98rem;text-align:center}
+.data-table td{text-align:left}
+.vocab-table tr:nth-child(even),.data-table tr:nth-child(even){background:#FAFAFA}
+.tick-row{display:flex;align-items:center;gap:8px;padding:8px 10px;background:#fff;border-radius:10px;margin-bottom:6px;border:1px solid #E0E0E0;cursor:pointer}
+.tick-row.good{border-color:#81C784;background:#E8F5E9}
+.tick-row.bad{border-color:#EF9A9A;background:#FFEBEE}
+.chk{width:22px;height:22px;accent-color:#8B2E2E}
+.step-card{background:#E3F2FD;border-radius:14px;padding:12px 14px;margin-bottom:10px;border-left:5px solid #1565C0}
+.step-card b{color:#0D47A1}
+.note-box{background:#FFF3E0;border:2px dashed #FFB74D;border-radius:14px;padding:12px 14px;margin:10px 0;font-size:.98rem;line-height:1.6}
+.def-box{background:linear-gradient(135deg,#FFEBEE,#FFCDD2);border-radius:16px;padding:14px 16px;margin:12px 0;border:2px solid #EF9A9A}
+.def-box h3{color:#6A1B1B;margin-bottom:6px;font-size:1.05rem}
+.info-box{background:#E3F2FD;border-radius:14px;padding:12px 14px;margin:10px 0;border-left:5px solid #1565C0}
+.exp-box{background:#FCE4EC;border:2px solid #F48FB1;border-radius:16px;padding:14px;margin:12px 0}
+.exp-box h3{color:#AD1457;margin-bottom:8px}
+.modal-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.7);z-index:100;display:none;justify-content:center;align-items:center;padding:20px}
+.modal-overlay.active{display:flex}
+.reward-card{background:#fff;border-radius:30px;padding:28px;text-align:center;max-width:460px;width:100%;box-shadow:0 20px 40px rgba(0,0,0,.3);border:5px solid #FFD54F}
+.reward-icon{font-size:3.4rem;margin-bottom:8px}
+.reward-title{color:#8B2E2E;font-size:1.7rem;margin-bottom:6px;font-family:'Baloo 2',cursive}
+.reward-subtitle{color:#E65100;font-size:1.05rem;margin-bottom:16px}
+.primary-action-btn{background:linear-gradient(135deg,#C62828,#8B2E2E);color:#fff;border:none;padding:12px 26px;border-radius:25px;font-size:1.02rem;font-weight:bold;cursor:pointer;font-family:'Baloo 2',cursive}
+.instructions-list{text-align:left;line-height:1.85;font-size:1rem;background:#F5F5F5;padding:18px;border-radius:15px;width:100%}
+.instructions-list li{margin-bottom:8px}
+.qp-section{background:#FFEBEE;border:2px solid #EF9A9A;border-radius:16px;padding:16px;margin-bottom:16px}
+.qp-heading{color:#8B2E2E;font-size:1.1rem;font-weight:800;margin-bottom:10px;border-bottom:2px dashed #EF9A9A;padding-bottom:6px}
+.qp-q{background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:10px;border-left:4px solid var(--teal);font-size:1.02rem;line-height:1.65}
+.qp-q .qnum{font-weight:bold;color:var(--teal)}
+.unit-qp-paper{background:#fff;border:2px solid #333;border-radius:8px;padding:26px 28px;font-family:'Times New Roman',Times,serif;color:#111;line-height:1.6}
+.sound-banner{display:none;width:100%;background:#FFF3E0;border:2px solid #FF9800;border-radius:16px;padding:10px 14px;margin-bottom:12px;text-align:center;font-weight:700;cursor:pointer;color:#E65100}
+.sound-banner.show{display:block}
+.sound-banner.on{background:#E8F5E9;border-color:#4CAF50;color:#2E7D32}
+.pic-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:10px 0}
+.pic-card{background:#fff;border:2px solid #EF9A9A;border-radius:14px;padding:10px;text-align:center;min-width:120px;flex:1}
+.pic-card .big{font-size:2.2rem}
+.pic-card .cap{font-size:.85rem;font-weight:700;color:#8B2E2E;margin-top:4px}
+.sim-btn{background:#00695C;color:#fff;border:none;padding:8px 14px;border-radius:14px;font-weight:bold;cursor:pointer;margin:4px}
+.lab-stage{background:#fff;border-radius:12px;padding:12px;margin-top:8px;min-height:48px;border:2px dashed #80CBC4}
+.match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;margin-top:8px}
+.match-col{display:flex;flex-direction:column;gap:8px}
+.match-col-title{font-weight:800;color:#5D4037;margin-bottom:4px;font-family:'Baloo 2',cursive}
+.match-item{background:#fff;border:3px solid #BCAAA4;padding:11px 12px;border-radius:14px;cursor:pointer;font-weight:700;text-align:left;font-family:'Quicksand',sans-serif;color:#3E2723;line-height:1.4}
+.match-item:hover{border-color:#FF8A65;background:#FFF3E0}
+.match-item.selected{border-color:#1565C0;background:#E3F2FD;box-shadow:0 0 0 2px #90CAF9}
+.match-item.paired{border-color:#7B1FA2;background:#E1BEE7}
+.match-item.paired-ok{border-color:#2E7D32;background:#C8E6C9}
+.match-item.paired-bad{border-color:#C62828;background:#FFCDD2}
+.match-status{margin-top:10px;font-weight:800;color:#5D4037}
+@media (max-width:600px){.match-wrap{grid-template-columns:1fr}}
+.tl{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.tl-item{background:#fff;border-left:6px solid #C9A227;padding:10px 12px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.tl-item b{color:#8B2E2E}
+@media print{
+header,.progress-container,.section-header,.controls,.btn-menu,.home-card .menu-grid,.reveal-model-btn,.check-btn,.submit-quiz-btn,.replay-btn,.mini-play,.read-all-btn,.no-print,.sound-banner{display:none!important}
+body{background:#fff!important}
+.content-box{box-shadow:none;border:none;max-width:100%!important;padding:0!important}
+.model-answer-box{display:block!important}
+}
+@media (max-width:600px){.main-title{font-size:1.32rem}.sub-title{font-size:.95rem}.options-grid,.quiz-opts{grid-template-columns:1fr}.logo-area h1{font-size:1rem}}
+</style>
+</head>
+<body>
+<div id="app">
+<header>
+<div class="logo-area" onclick="showScreen('homeScreen')"><div style="font-size:1.7rem">🏰</div><div><h1>Medieval India</h1><span>STD 7 · SOCIAL SCIENCE UNIT 1</span><div class="sub">Class 7 • Social Science • English Medium</div></div></div>
+<div class="stats-bar"><div class="stat-item">⭐ <span id="valScore">0</span></div><div class="stat-item">❤️ <span id="valLives">5</span></div><div class="stat-item">🏆 <span id="valStars">0</span></div></div>
+<div class="controls">
+<button class="icon-btn" id="btnAudioToggle" onclick="toggleAudio()" title="Sound">🔊</button>
+<button class="icon-btn" onclick="printPage()" title="Print">🖨️</button>
+<button class="icon-btn" onclick="downloadPage()" title="Download">⬇️</button>
+<button class="icon-btn" onclick="toggleFullscreen()" title="Full Screen">⛶</button>
+<button class="icon-btn" onclick="showScreen('homeScreen')" title="Home">🏠</button>
+</div>
+</header>
+<div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+<div class="sound-banner" id="soundBanner" onclick="unlockAudioEngine();playSound('fanfare');">🔊 Tap here once to enable and TEST sound</div>
+<audio id="voicePlayer" playsinline webkit-playsinline preload="auto"></audio>
+<audio id="fxPlayer" playsinline webkit-playsinline preload="auto"></audio>
+
+<div id="homeScreen" class="screen active">
+<div class="home-card">
+<h1 class="main-title">🏰 Medieval India</h1>
+<h2 class="sub-title">UNIT 1 · Mughals and Vijayanagara</h2>
+<div class="author-tag">Class 7 Social Science · English Medium · Interactive Lesson</div>
+<div class="menu-grid">
+<button class="btn-menu b1" onclick="openChoose('read')">📖 Read Lesson</button>
+<button class="btn-menu b2" onclick="openChoose('learn')">🗂️ Key Terms</button>
+<button class="btn-menu b6" onclick="openChoose('activities')">📝 Activities &amp; Tasks</button>
+<button class="btn-menu b15" onclick="openChoose('labs')">🔍 Sources &amp; Enquiry</button>
+<button class="btn-menu b3" onclick="openChoose('games')">🎮 History Games</button>
+<button class="btn-menu b4" onclick="openChoose('quiz')">❓ Chapter Quiz</button>
+<button class="btn-menu b10" onclick="showScreen('modelQPScreen')">📋 Model Question Paper</button>
+<button class="btn-menu b16" onclick="showScreen('unitQPScreen')">📄 Unit Question Paper</button>
+<button class="btn-menu b7" onclick="openChoose('vocab')">📚 Glossary</button>
+<button class="btn-menu b11" onclick="openChoose('diary')">📔 History Diary</button>
+<button class="btn-menu b13" onclick="openChoose('roleplay')">🎭 Role Play Zone</button>
+<button class="btn-menu b14" onclick="openChoose('compare')">⚖️ Compare Kingdoms</button>
+<button class="btn-menu b5" onclick="showScreen('assessScreen')">✅ Let's Assess</button>
+<button class="btn-menu b9" onclick="showScreen('timelineScreen')">⏳ Timeline</button>
+<button class="btn-menu b8" onclick="showScreen('instructionsScreen')">ℹ️ Instructions</button>
+</div>
+</div>
+</div>
+
+<div id="chooseScreen" class="screen">
+<div class="section-header"><div class="section-title" id="chooseTitle">Choose Section</div><button class="back-btn" onclick="showScreen('homeScreen')">Back</button></div>
+<div class="content-box"><div style="display:flex;flex-direction:column;align-items:center;width:100%" id="chooseList"></div></div>
+</div>
+
+<div id="contentScreen" class="screen">
+<div class="section-header"><div class="section-title" id="contentTitle">Content</div><button class="back-btn" id="contentBackBtn" onclick="goBackFromContent()">Back</button></div>
+<div class="content-box" id="contentBody"></div>
+</div>
+
+<div id="gamesMenuScreen" class="screen">
+<div class="section-header"><div class="section-title" id="gamesMenuTitle">🎮 History Games</div><button class="back-btn" onclick="openChoose('games')">Back</button></div>
+<div class="menu-grid" style="max-width:720px;margin:10px auto" id="gamesButtons"></div>
+</div>
+
+<div id="game1Screen" class="screen"><div class="game-box"><div class="game-instruction" id="gameQ">Match or guess the correct answer.</div><div id="gameProgress" style="margin-bottom:10px;font-weight:bold;color:#8B2E2E"></div><div class="options-grid" id="gameOptionsGrid"></div><div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;justify-content:center"><button class="back-btn" onclick="openChoose('games')">Back to topics</button><button class="back-btn" onclick="showScreen('homeScreen')">Home</button></div></div></div>
+
+<div id="modelQPScreen" class="screen"><div class="section-header"><div class="section-title">📋 Model Question Paper</div><button class="back-btn" onclick="showScreen('homeScreen')">Back</button></div><div class="content-box" id="modelQPContainer"></div></div>
+
+<div id="unitQPScreen" class="screen">
+<div class="section-header"><div class="section-title">📄 Unit Question Paper</div><button class="back-btn" onclick="showScreen('homeScreen')">Back</button></div>
+<div class="content-box" style="max-width:900px">
+<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:18px" class="no-print">
+<button class="btn-menu b1" style="padding:10px 22px;box-shadow:0 4px 0 rgba(0,0,0,.2)" onclick="printUnitQP()">🖨️ Print Question Paper</button>
+<button class="btn-menu b3" style="padding:10px 22px;box-shadow:0 4px 0 rgba(0,0,0,.2)" onclick="downloadUnitQPasPDF()">⬇️ Download as PDF</button>
+</div>
+<div id="unitQPPaper" class="unit-qp-paper"></div>
+</div>
+</div>
+
+<div id="assessScreen" class="screen">
+<div class="section-header"><div class="section-title">✅ Let's Assess</div><button class="back-btn" onclick="showScreen('homeScreen')">Back</button></div>
+<div class="content-box" id="assessBody"></div>
+</div>
+
+<div id="timelineScreen" class="screen">
+<div class="section-header"><div class="section-title">⏳ Medieval Timeline</div><button class="back-btn" onclick="showScreen('homeScreen')">Back</button></div>
+<div class="content-box" id="timelineBody"></div>
+</div>
+
+<div id="instructionsScreen" class="screen">
+<div class="section-header"><div class="section-title">ℹ️ Instructions</div><button class="back-btn" onclick="showScreen('homeScreen')">Back</button></div>
+<div class="content-box"><div class="instructions-list">
+<ul>
+<li>Tap the orange banner or <b>Test Sound</b> once, then raise device volume.</li>
+<li><b>Read Lesson</b> reads the paragraph in clear English (device English voice). Words highlight while they are spoken.</li>
+<li><b>Activities</b> include every textbook task (map list, notes, discussions, comparison tables).</li>
+<li><b>Sources &amp; Enquiry</b> trains you to read travelogues, obituaries and memoirs like a historian.</li>
+<li><b>Unit Question Paper</b> can be printed or saved as PDF for exam practice.</li>
+<li>Score, lives and stars are saved on this device while you play.</li>
+</ul>
+</div></div>
+</div>
+</div>
+
+<div class="modal-overlay" id="rewardModal"><div class="reward-card"><div class="reward-icon">🏅</div><h2 class="reward-title">Excellent!</h2><p class="reward-subtitle">You completed this activity successfully.</p><button class="primary-action-btn" onclick="closeRewardModal()">Continue</button></div></div>
+
+<script>
+let audioCtx=null, masterGain=null, audioUnlocked=false, narratorTimer=null, narratorStop=false, lastWavUrl=null, keepAliveOsc=null;
+const SR=16000;
+const state={score:0,lives:5,stars:0,audioEnabled:true,currentSection:null,currentSub:null,lastChooseSection:null,visited:{},readingAll:false};
+
+let activeSource=null;
+function samplesToWavBytes(samples, sr){
+  const n=samples.length;
+  const bytes=new Uint8Array(44+n*2);
+  const v=new DataView(bytes.buffer);
+  function ws(o,s){for(let i=0;i<s.length;i++) v.setUint8(o+i,s.charCodeAt(i));}
+  ws(0,'RIFF'); v.setUint32(4,36+n*2,true); ws(8,'WAVE'); ws(12,'fmt ');
+  v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true);
+  v.setUint32(24,sr,true); v.setUint32(28,sr*2,true); v.setUint16(32,2,true); v.setUint16(34,16,true);
+  ws(36,'data'); v.setUint32(40,n*2,true);
+  let o=44;
+  for(let i=0;i<n;i++){
+    let s=samples[i]; if(s>1)s=1; if(s<-1)s=-1;
+    v.setInt16(o, s<0?s*0x8000:s*0x7FFF, true); o+=2;
+  }
+  return bytes;
+}
+function samplesToWavDataUri(samples, sr){
+  const bytes=samplesToWavBytes(samples, sr||SR);
+  let bin='';
+  const step=0x8000;
+  for(let i=0;i<bytes.length;i+=step){
+    bin+=String.fromCharCode.apply(null, bytes.subarray(i, Math.min(i+step, bytes.length)));
+  }
+  return 'data:audio/wav;base64,'+btoa(bin);
+}
+function playSamplesNow(samples, playerId){
+  if(!state.audioEnabled || !samples || !samples.length) return;
+  const ctx=ensureCtx();
+  if(ctx){
+    try{
+      if(ctx.state==='suspended' && ctx.resume) ctx.resume();
+      const buf=ctx.createBuffer(1, samples.length, SR);
+      buf.getChannelData(0).set(samples);
+      if(activeSource){ try{ activeSource.stop(0); }catch(e){} }
+      const src=ctx.createBufferSource();
+      const g=ctx.createGain();
+      g.gain.value=0.9;
+      src.buffer=buf;
+      src.connect(g); g.connect(ctx.destination);
+      src.start(0);
+      activeSource=src;
+    }catch(e){}
+  }
+  try{
+    const el=document.getElementById(playerId||'voicePlayer');
+    const uri=samplesToWavDataUri(samples, SR);
+    if(el){
+      el.muted=false; el.volume=1;
+      el.src=uri;
+      const p=el.play();
+      if(p && p.catch) p.catch(function(){
+        try{ new Audio(uri).play(); }catch(e2){}
+      });
+    } else {
+      new Audio(uri).play();
+    }
+  }catch(e){}
+}
+function playInternalWav(samples, sr, playerId){
+  playSamplesNow(samples, playerId);
+  return Promise.resolve();
+}
+function toneSamples(freq, dur, vol, type){
+  const n=Math.max(1, Math.floor(SR*dur));
+  const out=new Float32Array(n);
+  for(let i=0;i<n;i++){
+    const t=i/SR;
+    const env=Math.min(1,i/80)*Math.min(1,(n-i)/120);
+    let s=Math.sin(2*Math.PI*freq*t);
+    if(type==='triangle'){ const x=t*freq; s=2*(x-Math.floor(x+0.5)); }
+    else if(type==='square'){ s=Math.sin(2*Math.PI*freq*t)>0?1:-1; }
+    else if(type==='sawtooth'){ const x=t*freq; s=2*(x-Math.floor(x))-1; }
+    out[i]=s*env*(vol||0.35);
+  }
+  return out;
+}
+function concatSamples(parts){
+  let len=0; for(let i=0;i<parts.length;i++) len+=parts[i].length;
+  const out=new Float32Array(len); let o=0;
+  for(let i=0;i<parts.length;i++){ out.set(parts[i],o); o+=parts[i].length; }
+  return out;
+}
+function ensureCtx(){
+  if(audioCtx && audioCtx.state!=='closed') return audioCtx;
+  const AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC) return null;
+  try{
+    audioCtx=new AC();
+    masterGain=audioCtx.createGain();
+    masterGain.gain.value=0.28;
+    masterGain.connect(audioCtx.destination);
+  }catch(e){ audioCtx=null; }
+  return audioCtx;
+}
+function startKeepAlive(){
+  const ctx=ensureCtx();
+  if(!ctx || keepAliveOsc) return;
+  try{
+    keepAliveOsc=ctx.createOscillator();
+    const g=ctx.createGain();
+    g.gain.value=0.00002;
+    keepAliveOsc.frequency.value=20;
+    keepAliveOsc.connect(g); g.connect(ctx.destination);
+    keepAliveOsc.start();
+  }catch(e){ keepAliveOsc=null; }
+}
+function unlockAudioEngine(){
+  audioUnlocked=true;
+  const b=document.getElementById('soundBanner');
+  if(b){b.classList.add('on');b.classList.remove('show');b.innerText='🔊 Sound is ON — in-app narrator is ready';}
+  const ctx=ensureCtx();
+  if(ctx && ctx.state==='suspended' && ctx.resume) ctx.resume().catch(function(){});
+  startKeepAlive();
+  const v=document.getElementById('voicePlayer');
+  const f=document.getElementById('fxPlayer');
+  [v,f].forEach(function(el){
+    if(!el) return;
+    try{ el.muted=false; el.volume=1; const pr=el.play(); if(pr&&pr.catch) pr.catch(function(){}); el.pause(); }catch(e){}
+  });
+  playSound('click');
+}
+function showSoundBannerIfNeeded(){
+  const b=document.getElementById('soundBanner');
+  if(!b) return;
+  if(!audioUnlocked) b.classList.add('show');
+}
+function playTone(freq,dur,type,vol){
+  if(!state.audioEnabled) return;
+  const samples=toneSamples(freq, dur||0.12, vol||0.32, type);
+  playInternalWav(samples, SR, 'fxPlayer');
+  const ctx=ensureCtx();
+  if(!ctx) return;
+  try{
+    if(ctx.state==='suspended' && ctx.resume) ctx.resume();
+    const t0=ctx.currentTime;
+    const osc=ctx.createOscillator();
+    const g=ctx.createGain();
+    osc.type=type||'sine';
+    osc.frequency.setValueAtTime(freq,t0);
+    g.gain.setValueAtTime(0.0001,t0);
+    g.gain.exponentialRampToValueAtTime(vol||0.18,t0+0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001,t0+(dur||0.12));
+    osc.connect(g); g.connect(masterGain||ctx.destination);
+    osc.start(t0); osc.stop(t0+(dur||0.12)+0.02);
+  }catch(e){}
+}
+function playSound(type){
+  if(!state.audioEnabled) return;
+  if(type==='correct') playInternalWav(concatSamples([toneSamples(523,.12,.32),toneSamples(659,.14,.3),toneSamples(784,.22,.28)]),SR,'fxPlayer');
+  else if(type==='wrong') playInternalWav(concatSamples([toneSamples(220,.16,.3,'sawtooth'),toneSamples(165,.2,.28,'sawtooth')]),SR,'fxPlayer');
+  else if(type==='click') playInternalWav(toneSamples(640,.07,.28,'triangle'),SR,'fxPlayer');
+  else if(type==='fanfare') playInternalWav(concatSamples([toneSamples(523,.2,.28),toneSamples(659,.2,.28),toneSamples(784,.22,.28),toneSamples(1046,.3,.3)]),SR,'fxPlayer');
+  else if(type==='pop') playInternalWav(toneSamples(880,.08,.24,'square'),SR,'fxPlayer');
+}
+const VFORM={a:[760,1180],e:[530,1840],i:[300,2200],o:[570,920],u:[380,800],y:[350,1800]};
+function wordToSamples(word){
+  const w=String(word).toLowerCase().replace(/[^a-z0-9]/g,'');
+  if(!w) return new Float32Array(Math.floor(SR*0.08));
+  const parts=[];
+  for(let i=0;i<w.length;i++){
+    const ch=w[i];
+    const form=VFORM[ch];
+    const dur=form?0.095:0.05;
+    const n=Math.floor(SR*dur);
+    const buf=new Float32Array(n);
+    const f1=form?form[0]:(180+ch.charCodeAt(0)%90);
+    const f2=form?form[1]:f1*2.1;
+    for(let s=0;s<n;s++){
+      const env=Math.min(1,s/70)*Math.min(1,(n-s)/90);
+      buf[s]=(Math.sin(2*Math.PI*f1*s/SR)*0.62+Math.sin(2*Math.PI*f2*s/SR)*0.38)*env;
+    }
+    parts.push(buf);
+  }
+  parts.push(new Float32Array(Math.floor(SR*0.03)));
+  return concatSamples(parts);
+}
+function hasSpeech(){
+  return typeof window!=='undefined' && 'speechSynthesis' in window && typeof SpeechSynthesisUtterance!=='undefined';
+}
+function pickEnglishVoice(){
+  if(!hasSpeech()) return null;
+  const voices=window.speechSynthesis.getVoices()||[];
+  if(!voices.length) return null;
+  const score=function(v){
+    const n=(v.name||'')+' '+(v.lang||'');
+    if(/en-IN|Indian|Ravi|Heera|Google हिन्दी|English India/i.test(n)) return 5;
+    if(/en-GB|UK|Daniel|Female.*UK/i.test(n)) return 4;
+    if(/en-US|US English|Samantha|Google US/i.test(n)) return 3;
+    if(/^en/i.test(v.lang||'')) return 2;
+    return 0;
+  };
+  return voices.slice().sort(function(a,b){return score(b)-score(a);})[0]||voices[0];
+}
+function warmVoices(){
+  if(!hasSpeech()) return;
+  try{ window.speechSynthesis.getVoices(); }catch(e){}
+  if(typeof window.speechSynthesis.addEventListener==='function'){
+    window.speechSynthesis.addEventListener('voiceschanged', function(){ pickEnglishVoice(); });
+  }
+}
+function stopNarrator(full){
+  narratorStop=true;
+  if(narratorTimer){clearTimeout(narratorTimer);narratorTimer=null;}
+  if(full!==false) state.readingAll=false;
+  if(activeSource){ try{ activeSource.stop(0); }catch(e){} activeSource=null; }
+  if(hasSpeech()){
+    try{ window.speechSynthesis.cancel(); }catch(e){}
+  }
+  const v=document.getElementById('voicePlayer');
+  if(v){try{v.pause();}catch(e){}}
+  document.querySelectorAll('.story-para.reading').forEach(e=>e.classList.remove('reading'));
+  document.querySelectorAll('.word-hl').forEach(e=>{const t=e.textContent; e.replaceWith(document.createTextNode(t));});
+}
+function buildSpeech(text){
+  const words=String(text).split(/(\s+)/).filter(s=>s.length);
+  const parts=[];
+  const marks=[];
+  let t=0;
+  for(let i=0;i<words.length;i++){
+    const w=words[i];
+    if(/^\s+$/.test(w)){
+      const sil=new Float32Array(Math.floor(SR*0.04));
+      parts.push(sil); t+=sil.length/SR; continue;
+    }
+    marks.push({i:i, t:t});
+    const sm=wordToSamples(w);
+    parts.push(sm);
+    t+=sm.length/SR;
+  }
+  return {words:words, marks:marks, samples:parts.length?concatSamples(parts):toneSamples(440,.2,.5), duration:t};
+}
+function wrapWords(paraEl, words){
+  if(!paraEl) return;
+  paraEl.classList.add('reading');
+  const p=paraEl.querySelector('p');
+  if(p){
+    p.innerHTML=words.map((w,i)=>/\s+/.test(w)?w:`<span class="nw" data-i="${i}">${w}</span>`).join('');
+  }
+}
+function highlightWord(paraEl, index){
+  if(!paraEl) return;
+  paraEl.querySelectorAll('.word-hl').forEach(e=>e.classList.remove('word-hl'));
+  const span=paraEl.querySelector('.nw[data-i="'+index+'"]');
+  if(span) span.classList.add('word-hl');
+}
+function wordIndexAtChar(words, charIndex){
+  let pos=0;
+  for(let i=0;i<words.length;i++){
+    const next=pos+words[i].length;
+    if(charIndex>=pos && charIndex<next) return i;
+    pos=next;
+  }
+  return words.length-1;
+}
+function speakWithTTS(text, paraEl, onend){
+  const words=String(text).split(/(\s+)/).filter(s=>s.length);
+  wrapWords(paraEl, words);
+  const u=new SpeechSynthesisUtterance(String(text));
+  u.lang='en-IN';
+  u.rate=0.92;
+  u.pitch=1;
+  u.volume=1;
+  const voice=pickEnglishVoice();
+  if(voice){ u.voice=voice; if(voice.lang) u.lang=voice.lang; }
+  u.onboundary=function(ev){
+    if(narratorStop) return;
+    const idx=(typeof ev.charIndex==='number')?wordIndexAtChar(words, ev.charIndex):null;
+    if(idx!=null && !/^\s+$/.test(words[idx]||'')) highlightWord(paraEl, idx);
+  };
+  u.onend=function(){
+    if(paraEl) paraEl.classList.remove('reading');
+    if(onend) onend(!narratorStop);
+  };
+  u.onerror=function(){
+    if(paraEl) paraEl.classList.remove('reading');
+    if(onend) onend(false);
+  };
+  window.speechSynthesis.speak(u);
+}
+function narrateText(text, paraEl, onend){
+  const keepEnabled=state.audioEnabled;
+  const keepAll=state.readingAll;
+  stopNarrator(false);
+  narratorStop=false;
+  state.readingAll=keepAll;
+  state.audioEnabled=keepEnabled;
+  if(!state.audioEnabled){ if(onend) onend(false); return; }
+  unlockAudioEngine();
+  warmVoices();
+  if(hasSpeech()){
+    try{ if(window.speechSynthesis.speaking || window.speechSynthesis.pending) window.speechSynthesis.cancel(); }catch(e){}
+    speakWithTTS(text, paraEl, onend);
+    return;
+  }
+  const built=buildSpeech(text);
+  wrapWords(paraEl, built.words);
+  playSamplesNow(built.samples, 'voicePlayer');
+  let m=0;
+  function tickHl(){
+    if(narratorStop){ if(onend) onend(false); return; }
+    if(m>=built.marks.length){
+      if(paraEl) paraEl.classList.remove('reading');
+      if(onend) onend(true);
+      return;
+    }
+    highlightWord(paraEl, built.marks[m].i);
+    const nextT=(m+1<built.marks.length)?built.marks[m+1].t:built.duration;
+    const wait=Math.max(80, (nextT-built.marks[m].t)*1000);
+    m++;
+    narratorTimer=setTimeout(tickHl, wait);
+  }
+  tickHl();
+}
+function speakText(text,onend){ narrateText(text, null, onend); }
+function toggleAudio(){
+  state.audioEnabled=!state.audioEnabled;
+  document.getElementById('btnAudioToggle').innerText=state.audioEnabled?'🔊':'🔇';
+  if(!state.audioEnabled) stopNarrator();
+  else unlockAudioEngine();
+}
+function toggleFullscreen(){
+  if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(()=>{});}
+  else if(document.exitFullscreen) document.exitFullscreen();
+}
+function printPage(){playSound('click');window.print();}
+function printUnitQP(){playSound('click');window.print();}
+function downloadPage(){
+  playSound('click');
+  try{
+    const htmlContent="<!DOCTYPE html>\n"+document.documentElement.outerHTML;
+    const blob=new Blob([htmlContent],{type:'text/html'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a'); a.href=url; a.download='Medieval_India_STD7_Social_Science.html';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(url),2500);
+  }catch(e){alert('Use Print instead.');}
+}
+function updateStatsUI(){
+  document.getElementById('valScore').innerText=state.score;
+  document.getElementById('valLives').innerText=state.lives;
+  document.getElementById('valStars').innerText=state.stars;
+  const pb=document.getElementById('progressBar');
+  if(pb) pb.style.width=Math.min(100,state.score/3)+'%';
+}
+function showRewardModal(){playSound('fanfare');document.getElementById('rewardModal').classList.add('active');}
+function closeRewardModal(){document.getElementById('rewardModal').classList.remove('active');showScreen('homeScreen');}
+function revealModel(id,btn){
+  const el=document.getElementById(id); if(!el) return;
+  const showing=el.style.display==='block';
+  el.style.display=showing?'none':'block';
+  if(!showing){state.score+=5;updateStatsUI();playSound('correct');if(btn)btn.innerText='🙈 Hide model answer';}
+  else if(btn){btn.innerText='💡 Show model answer';}
+}
+
+const TOPICS=[
+  {id:'topic1',emoji:'🚩',title:'1. Two Kingdoms of Medieval India',sub:'രണ്ട് മധ്യകാല രാജ്യങ്ങൾ — ചുവപ്പുകോട്ടയും ഹംപിയും'},
+  {id:'topic2',emoji:'⚔️',title:'2. Mughal Rule and Battle of Panipat',sub:'മുഗൾ ഭരണവും പാനിപ്പത്ത് യുദ്ധവും'},
+  {id:'topic3',emoji:'🕊️',title:'3. Akbar: Tolerance and Din-i-Ilahi',sub:'അക്ബറിന്റെ മതസഹിഷ്ണുതയും ദീൻ-ഇ-ഇലാഹിയും'},
+  {id:'topic4',emoji:'🛡️',title:'4. Army and Mughal Administration',sub:'മൻസബ്ദാരി സേനയും ഭരണക്രമവും'},
+  {id:'topic5',emoji:'💰',title:'5. Society, Economy and Culture',sub:'സാമൂഹിക-സാമ്പത്തിക ജീവിതവും സാംസ്കാരിക സമന്വയവും'},
+  {id:'topic6',emoji:'🛕',title:'6. Vijayanagara Kingdom',sub:'വിജയനഗര സാമ്രാജ്യം — ഹംപിയും കൃഷ്ണദേവരായരും'}
+];
+const SECTION_TITLES={
+  read:'📖 Read Lesson',
+  learn:'🗂️ Key Terms',
+  activities:'📝 Activities & Tasks',
+  labs:'🔍 Sources & Enquiry',
+  games:'🎮 History Games',
+  quiz:'❓ Chapter Quiz',
+  vocab:'📚 Glossary',
+  diary:'📔 History Diary',
+  roleplay:'🎭 Role Play Zone',
+  compare:'⚖️ Compare Kingdoms'
+};
+
+const MATCH_DATA={
+  topic1:[
+    {left:'Red Fort', right:'Delhi — built by Shah Jahan'},
+    {left:'Hampi', right:'Capital of Vijayanagara'},
+    {left:'Independence Day flag', right:'Hoisted at the Red Fort'}
+  ],
+  topic2:[
+    {left:'Babur', right:'Founder of Mughal rule, 1526'},
+    {left:'Ibrahim Lodi', right:'Last ruler of the Lodi dynasty'},
+    {left:'Panipat', right:'Place of the first Mughal victory in India'},
+    {left:'Mughal', right:'Name derived from Mongol'}
+  ],
+  topic3:[
+    {left:'Ibadat Khana', right:'Hall for discussions among religions'},
+    {left:'Din-i-Ilahi', right:'Akbar’s path combining good aspects of religions'},
+    {left:'Sulh-i-kul', right:'Peace to all'},
+    {left:'Jizyah', right:'Religious tax abolished by Akbar'}
+  ],
+  topic4:[
+    {left:'Mansab', right:'Rank shown by number of cavalry'},
+    {left:'Mansabdar', right:'Officer who maintains troops from allotted land'},
+    {left:'Qazi', right:'Local scholar who judged disputes'},
+    {left:'Suba', right:'Province in Mughal administration'}
+  ],
+  topic5:[
+    {left:'Dhaka', right:'Bangladesh'},
+    {left:'Murshidabad', right:'India'},
+    {left:'Lahore', right:'Pakistan'},
+    {left:'Surat', right:'India'},
+    {left:'Agra', right:'India'}
+  ],
+  topic6:[
+    {left:'Harihara and Bukka', right:'Founders of Vijayanagara, 1336'},
+    {left:'Krishna Deva Raya', right:'Most famous Tuluva ruler'},
+    {left:'Amara-Nayaka', right:'Commander who held amara land'},
+    {left:'Ashtadiggajas', right:'Eight scholars of the royal court'},
+    {left:'Gopuram', right:'Giant temple gateway'}
+  ],
+  assess:[
+    {left:'Apiculture', right:'Rearing of honey bees'},
+    {left:'Sericulture', right:'Rearing of silkworm'},
+    {left:'Pisciculture', right:'Rearing of fish'},
+    {left:'Cuniculture', right:'Rearing of rabbits'}
+  ],
+  sources:[
+    {left:'Abul Fazl', right:'Ain-i-Akbari and Akbar Nama'},
+    {left:'Barbosa', right:'Religious freedom under Krishna Deva Raya'},
+    {left:'Domingo Paes', right:'Rich streets and markets of Vijayanagara'},
+    {left:'Ralph Fitch', right:'Agra and Fatehpur Sikri larger than London'},
+    {left:'Pierre du Jarric', right:'Obituary praising Akbar’s justice'}
+  ]
+};
+
+function shuffle(arr){
+  const a=arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    const t=a[i]; a[i]=a[j]; a[j]=t;
+  }
+  return a;
+}
+function renderMatchWidget(container, pairs, matchId){
+  const lefts=pairs.map((p,i)=>({id:String(i),text:p.left,pair:String(i)}));
+  const rights=shuffle(pairs.map((p,i)=>({id:'r'+i,text:p.right,pair:String(i)})));
+  const wrap=document.createElement('div');
+  wrap.className='match-game';
+  wrap.id=matchId;
+  wrap.dataset.selectedLeft='';
+  wrap.dataset.selectedRight='';
+  wrap.innerHTML=`
+    <div class="match-wrap">
+      <div class="match-col" id="${matchId}-left"><div class="match-col-title">Column A</div></div>
+      <div class="match-col" id="${matchId}-right"><div class="match-col-title">Column B</div></div>
+    </div>
+    <div class="match-status" id="${matchId}-status">Tap one item from A, then its pair from B.</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+      <button class="check-btn" type="button" data-match-check="${matchId}">✅ Check matches</button>
+      <button class="reveal-model-btn" type="button" data-match-reset="${matchId}">↺ Reset</button>
+    </div>`;
+  container.appendChild(wrap);
+  const leftCol=wrap.querySelector('#'+matchId+'-left');
+  const rightCol=wrap.querySelector('#'+matchId+'-right');
+  lefts.forEach(item=>{
+    const b=document.createElement('button');
+    b.type='button';
+    b.className='match-item left';
+    b.dataset.id=item.id;
+    b.dataset.pair=item.pair;
+    b.textContent=item.text;
+    leftCol.appendChild(b);
+  });
+  rights.forEach(item=>{
+    const b=document.createElement('button');
+    b.type='button';
+    b.className='match-item right';
+    b.dataset.id=item.id;
+    b.dataset.pair=item.pair;
+    b.textContent=item.text;
+    rightCol.appendChild(b);
+  });
+  const colors=['#E1BEE7','#BBDEFB','#FFE0B2','#C8E6C9','#F8BBD0','#B2DFDB','#D1C4E9','#F0F4C3'];
+  wrap.matchState={pairs:{},checked:false,colorIdx:0};
+  wrap.addEventListener('click', function(ev){
+    const item=ev.target.closest('.match-item');
+    const checkBtn=ev.target.closest('[data-match-check]');
+    const resetBtn=ev.target.closest('[data-match-reset]');
+    if(checkBtn){ checkMatchWidget(wrap); return; }
+    if(resetBtn){ resetMatchWidget(wrap, pairs, matchId); return; }
+    if(!item || wrap.matchState.checked) return;
+    if(item.classList.contains('paired')) return;
+    playSound('click');
+    if(item.classList.contains('left')){
+      wrap.querySelectorAll('.match-item.left.selected').forEach(e=>e.classList.remove('selected'));
+      item.classList.add('selected');
+      wrap.dataset.selectedLeft=item.dataset.id;
+    } else {
+      wrap.querySelectorAll('.match-item.right.selected').forEach(e=>e.classList.remove('selected'));
+      item.classList.add('selected');
+      wrap.dataset.selectedRight=item.dataset.id;
+    }
+    const leftId=wrap.dataset.selectedLeft;
+    const rightId=wrap.dataset.selectedRight;
+    if(leftId && rightId){
+      const leftEl=wrap.querySelector('.match-item.left[data-id="'+leftId+'"]');
+      const rightEl=wrap.querySelector('.match-item.right[data-id="'+rightId+'"]');
+      if(leftEl && rightEl){
+        const color=colors[wrap.matchState.colorIdx % colors.length];
+        wrap.matchState.colorIdx++;
+        leftEl.classList.remove('selected');
+        rightEl.classList.remove('selected');
+        leftEl.classList.add('paired');
+        rightEl.classList.add('paired');
+        leftEl.style.background=color;
+        rightEl.style.background=color;
+        wrap.matchState.pairs[leftEl.dataset.pair]=rightEl.dataset.pair;
+      }
+      wrap.dataset.selectedLeft='';
+      wrap.dataset.selectedRight='';
+      const done=Object.keys(wrap.matchState.pairs).length;
+      wrap.querySelector('.match-status').textContent='Paired '+done+' / '+pairs.length+'. Tap Check matches when ready.';
+    }
+  });
+}
+function resetMatchWidget(wrap, pairs, matchId){
+  playSound('click');
+  const parent=wrap.parentNode;
+  wrap.remove();
+  renderMatchWidget(parent, pairs, matchId);
+}
+function checkMatchWidget(wrap){
+  const lefts=[...wrap.querySelectorAll('.match-item.left')];
+  const rights=[...wrap.querySelectorAll('.match-item.right')];
+  const total=lefts.length;
+  const paired=Object.keys(wrap.matchState.pairs).length;
+  if(paired<total){
+    wrap.querySelector('.match-status').textContent='Match all items first ('+paired+' / '+total+').';
+    playSound('wrong');
+    return;
+  }
+  let right=0;
+  lefts.forEach(leftEl=>{
+    const expected=leftEl.dataset.pair;
+    const got=wrap.matchState.pairs[expected];
+    const rightEl=rights.find(r=>r.dataset.pair===got);
+    leftEl.classList.remove('paired','paired-ok','paired-bad');
+    if(rightEl){ rightEl.classList.remove('paired','paired-ok','paired-bad'); }
+    if(got===expected){
+      right++;
+      leftEl.classList.add('paired-ok');
+      leftEl.style.background='';
+      if(rightEl){ rightEl.classList.add('paired-ok'); rightEl.style.background=''; }
+    } else {
+      leftEl.classList.add('paired-bad');
+      leftEl.style.background='';
+      if(rightEl){ rightEl.classList.add('paired-bad'); rightEl.style.background=''; }
+    }
+  });
+  wrap.matchState.checked=true;
+  wrap.querySelector('.match-status').textContent='Score: '+right+' / '+total+(right===total?'  All matched correctly!':'  Red pairs are wrong — tap Reset and try again.');
+  if(right===total){state.score+=20;state.stars++;playSound('fanfare');showRewardModal();}
+  else playSound('wrong');
+  updateStatsUI();
+}
+
+function showScreen(id){
+  playSound('click');
+  stopNarrator();
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const t=document.getElementById(id); if(t) t.classList.add('active');
+  if(id==='modelQPScreen') renderModelQP();
+  if(id==='unitQPScreen') renderUnitQP();
+  if(id==='assessScreen') renderAssess();
+  if(id==='timelineScreen') renderTimeline();
+  showSoundBannerIfNeeded();
+}
+function openChoose(section){
+  state.currentSection=section; state.lastChooseSection=section;
+  document.getElementById('chooseTitle').innerText=SECTION_TITLES[section]||'Choose Section';
+  const list=document.getElementById('chooseList'); list.innerHTML='';
+  TOPICS.forEach(T=>{
+    const d=document.createElement('div'); d.className='lesson-pick';
+    d.innerHTML=`<div class="lp-emoji">${T.emoji}</div><div><div class="lp-title">${T.title}</div><div class="lp-sub">${T.sub}</div></div>`;
+    d.onclick=()=>selectTopic(T.id);
+    list.appendChild(d);
+  });
+  showScreen('chooseScreen');
+}
+function selectTopic(topicId){
+  state.currentSub=topicId;
+  if(state.currentSection==='games'){ launchGameMenu(topicId); return; }
+  renderContentFor(state.currentSection, topicId);
+}
+function goBackFromContent(){
+  if(state.lastChooseSection) openChoose(state.lastChooseSection);
+  else showScreen('homeScreen');
+}
+function renderContentFor(section,topicId){
+  const T=TOPICS.find(x=>x.id===topicId);
+  document.getElementById('contentTitle').innerText=(SECTION_TITLES[section]||section)+' → '+(T?T.title:'');
+  const body=document.getElementById('contentBody'); body.innerHTML='';
+  const map={
+    read:renderReadContent, learn:renderLearnContent, activities:renderActivitiesContent,
+    labs:renderLabsContent, quiz:renderQuizContent, vocab:renderVocabContent,
+    diary:renderDiaryContent, roleplay:renderRoleplayContent, compare:renderCompareContent
+  };
+  (map[section]||renderReadContent)(body,topicId);
+  showScreen('contentScreen');
+}
+
+const READ_CONTENTS={
+  topic1:[
+    "Observe the figures of two historical relics. These belong to two kingdoms that ruled medieval India.",
+    "You may be familiar with the first one. You might have seen our Prime Minister hoisting the National Flag here on Independence Day.",
+    "The first figure is the Red Fort, built in Delhi during the reign of Mughal emperor Shah Jahan.",
+    "The second is Hampi, the capital of the Vijayanagara kingdom that existed in South India during the same period.",
+    "Vijayanagara means City of Victory. After the city was destroyed in 1565 CE it lived on in popular memory as Hampi. Colonel Mackenzie of the English East India Company discovered the ruins in 1800."
+  ],
+  topic2:[
+    "Babur established Mughal rule in 1526. The Mughals ruled India till 1857 with Delhi as their capital.",
+    "The main Mughal rulers were Babur (1526-1530), Humayun (1530-1540 and 1555-1556), Akbar (1556-1605), Jahangir (1605-1627), Shah Jahan (1628-1658) and Aurangzeb (1658-1707).",
+    "The Mughal kingdom was vast. Besides present-day India it spread into neighbouring countries such as Afghanistan, parts of Pakistan and Bangladesh.",
+    "The name Mughal is derived from Mongol. Babur was a descendant of the Turkish ruler Timur on the paternal side and the Mongol king Genghis Khan on the maternal side. Europeans began calling this dynasty Mughal in the sixteenth century.",
+    "In 1526 Ibrahim Lodi, the last Lodi ruler, fought Babur, the ruler of Kabul, at Panipat in Haryana. This is the First Battle of Panipat. Babur’s victory laid the foundation of Mughal rule in India."
+  ],
+  topic3:[
+    "A Jesuit priest, Pierre du Jarric, wrote after Akbar’s death in 1605 that Akbar was a great emperor who treated Hindu, Christian and Muslim alike and administered equal justice.",
+    "In 1575 Akbar built the Ibadat Khana at his new capital Fatehpur Sikri. Scholars of many religions gathered there. These discussions show Akbar’s policy of religious tolerance.",
+    "Akbar created Din-i-Ilahi by combining good aspects of many religions. Sulh-i-kul, meaning peace to all, was its core idea. He wanted to show that all visions are for the welfare of human beings.",
+    "The abolition of the religious tax called Jizyah proved that tolerance was practised in administration too. People of all sects were treated equally.",
+    "Raja Todarmal, Raja Man Singh, Raja Bhagwan Das and Birbal held high positions in Akbar’s court.",
+    "Jahangir recorded in Tuzuk-i-Jahangiri that Akbar told followers not to waste time in enmity with other religions, to apply sulh-i-kul to all, and not to kill animals or take up arms except in war."
+  ],
+  topic4:[
+    "A strong army was needed to expand and protect the Mughal kingdom. Akbar implemented the Mansabdari system.",
+    "Each officer had a regiment. The title mansab refers to the number of cavalry an officer had to maintain. Rank depended on that number.",
+    "This was an alternative to paying the army directly from the state treasury. Mansabdars were allotted land according to rank and maintained their army by collecting tax from that land.",
+    "The emperor was sovereign authority, commander-in-chief, law-maker and supreme judge.",
+    "There were no separate courts as today. Local religious scholars called Qazis investigated disputes. Anyone dissatisfied could appeal to the emperor.",
+    "For convenience the empire was divided into Suba, Sarkar, Pargana and Grama. This structure was effectively formed during Akbar’s reign."
+  ],
+  topic5:[
+    "European travellers recorded Mughal society. A feudal system existed. The king stood at the top and the common man at the bottom. Most people were farmers and caste customs continued.",
+    "Tavernier described differences in food, clothing and lifestyle from place to place. Babur’s memoirs recorded labour and caste systems.",
+    "Ralph Fitch wrote that Agra and Fatehpur Sikri were larger than London and always bustling. Markets filled the twelve miles between them. This shows economic progress based on agriculture.",
+    "Rice, wheat, barley, sugarcane, cotton and oilseeds were major crops. Abul Fazl in Ain-i-Akbari recorded many varieties of rice. A farmer was not evicted so long as tax was paid.",
+    "The Persian wheel and canals improved irrigation. Trade and towns grew. Gujarat was a gateway of foreign goods. Exports included textiles, muslin, sugar and rice.",
+    "Major cities were Dhaka, Murshidabad, Surat, Lahore and Agra. Abul Fazl was Akbar’s advisor and the author of Ain-i-Akbari and Akbar Nama.",
+    "Cultural blending is seen in Razmnama, a Persian Mahabharata. Dara Shukoh, son of Shah Jahan, translated Indian works. Taj Mahal, Agra Fort and Red Fort fuse Indian and Persian styles. Urdu and Hindustani music also grew from this synthesis."
+  ],
+  topic6:[
+    "The Vijayanagara kingdom was the most prominent South Indian power of this age. It was founded in 1336 CE by the brothers Harihara and Bukka of the Sangama dynasty.",
+    "Other dynasties were Saluva (Narasimha Saluva), Tuluva (Vira Narasimha and Krishna Deva Raya) and Aravidu (Tirumala and Venkata I).",
+    "Krishna Deva Raya (1509-1529) was the most famous ruler. Portuguese traveller Barbosa wrote that Christians, Jews, Moors and Heathens could live by their creed without being annoyed.",
+    "His reign saw expansion, new forts, palaces and temples, and equal treatment of religions. He wrote Amuktamalyada and Jambavati Kalyanam and promoted Telugu, Kannada and Tamil. The Ashtadiggajas adorned his court.",
+    "Administration was a monarchy divided into mandalam, nadu, sthala and grama. The king could punish ministers. Village courts handled minor cases. The king was the highest appellate authority.",
+    "Military commanders called Amara-Nayakas received amara lands, collected taxes, paid a fixed sum to the king and maintained infantry, horses and elephants. This is the Amara-Nayaka system.",
+    "Brahmins were prominent and received temple land revenue. Agriculture, trade and handicrafts employed others. Polygamy, child marriage and sati existed among some groups.",
+    "Domingo Paes described streets of merchants selling rubies, diamonds, pearls and cloth, and fairs of horses, fruit and wood. Irrigation works such as Kamalapuram lake, Hiriyakanal and the Tungabhadra dam strengthened farming.",
+    "Revenue came from land tax by productivity, professional tax, building tax, licences and court fines. Arabs and later the Portuguese dominated horse trade. Local horse traders were called Kuthirachettis. Chinese pottery shows trade with China.",
+    "Culture flowered in Dravidian sculpture, huge gopurams, and temples such as Hazara Rama, Vitthala, Virupaksha and the Lotus Mahal. Schools taught Vedas and Sastras. Telugu literature flourished."
+  ]
+};
+
+function renderRead(body,topicId){
+  const lines=READ_CONTENTS[topicId]||[];
+  const T=TOPICS.find(x=>x.id===topicId);
+  body.innerHTML=`<div class="story-title-wrap"><span class="story-title">${T?T.title:''}</span></div>
+  <button class="read-all-btn" id="readAllBtn">🔊 Read All / Stop</button>
+  <button class="read-all-btn" type="button" id="testSoundBtn" style="background:linear-gradient(135deg,#FF8F00,#E65100);margin-left:8px">🔈 Test Sound</button>
+  <div class="note-box">Tap <b>Test Sound</b>, then the blue 🔊. The paragraph is read in clear English. Turn the device volume up. If no voice is heard, install/enable English Text-to-Speech in phone settings.</div>
+  <div id="storyParas"></div>`;
+  const paras=document.getElementById('storyParas');
+  lines.forEach((line,idx)=>{
+    const div=document.createElement('div');
+    div.className='story-para';
+    div.id='para'+idx;
+    div.innerHTML=`<p>${line}</p><button class="mini-play" data-idx="${idx}">🔊</button>`;
+    paras.appendChild(div);
+    div.querySelector('.mini-play').onclick=function(){
+      unlockAudioEngine();
+      narrateText(line, div, function(){});
+    };
+  });
+  const testBtn=document.getElementById('testSoundBtn');
+  if(testBtn) testBtn.onclick=function(){
+    unlockAudioEngine();
+    playSound('fanfare');
+    narrateText('Sound is working. This is the Medieval India lesson.', null, function(){});
+  };
+  document.getElementById('readAllBtn').onclick=function(){
+    unlockAudioEngine();
+    if(state.readingAll){stopNarrator(); this.innerText='🔊 Read All / Stop'; return;}
+    state.readingAll=true; this.innerText='⏹ Stop reading';
+    const allText=lines.join(' ');
+    const first=document.getElementById('para0');
+    narrateText(allText, first, function(){
+      state.readingAll=false;
+      const b=document.getElementById('readAllBtn');
+      if(b) b.innerText='🔊 Read All / Stop';
+    });
+  };
+}
+function renderReadContent(body,topicId){ renderRead(body,topicId); }
+
+const VOCAB_DATA={
+  topic1:[
+    {word:'Medieval India',meaning:'The period between the ancient and modern ages in Indian history; this lesson studies Mughals and Vijayanagara.'},
+    {word:'Red Fort',meaning:'Fort in Delhi built by Shah Jahan. The National Flag is hoisted here on Independence Day.'},
+    {word:'Hampi',meaning:'Popular name of the ruined capital of Vijayanagara, rediscovered in 1800 by Colonel Mackenzie.'}
+  ],
+  topic2:[
+    {word:'Mughal',meaning:'Name derived from Mongol. Europeans used it for Babur’s dynasty from the 16th century.'},
+    {word:'First Battle of Panipat',meaning:'1526 battle at Panipat in Haryana between Babur and Ibrahim Lodi. It founded Mughal rule.'},
+    {word:'Timur and Genghis Khan',meaning:'Babur’s ancestors — Timur on the father’s side, Genghis Khan on the mother’s side.'}
+  ],
+  topic3:[
+    {word:'Ibadat Khana',meaning:'House of worship built by Akbar at Fatehpur Sikri in 1575 for inter-religious discussion.'},
+    {word:'Din-i-Ilahi',meaning:'Akbar’s visionary path combining good aspects of many religions.'},
+    {word:'Sulh-i-kul',meaning:'Peace to all — the core of Akbar’s religious vision.'},
+    {word:'Jizyah',meaning:'Religious tax abolished by Akbar as a mark of administrative tolerance.'}
+  ],
+  topic4:[
+    {word:'Mansabdari',meaning:'Akbar’s military-administrative rank system. A mansab stated how many cavalry an officer must keep.'},
+    {word:'Mansabdar',meaning:'Officer who held a mansab, received land, collected tax and maintained troops.'},
+    {word:'Suba / Sarkar / Pargana / Grama',meaning:'Mughal administrative units from province down to village.'},
+    {word:'Qazi',meaning:'Local religious scholar who heard disputes when there were no separate civil courts.'}
+  ],
+  topic5:[
+    {word:'Ain-i-Akbari',meaning:'Book by Abul Fazl describing administration, society and crops under Akbar.'},
+    {word:'Persian wheel',meaning:'Irrigation device widely used in the Mughal period.'},
+    {word:'Razmnama',meaning:'Persian version of the Mahabharata — an example of cultural blending.'},
+    {word:'Urdu',meaning:'Language formed by fusion of Persian and Hindi in the Mughal age.'}
+  ],
+  topic6:[
+    {word:'Amara-Nayaka',meaning:'Vijayanagara military commander given amara land; collected tax and kept soldiers, horses and elephants.'},
+    {word:'Ashtadiggajas',meaning:'Eight great scholars in the court of Krishna Deva Raya.'},
+    {word:'Gopuram',meaning:'Gigantic temple gateway typical of Vijayanagara Dravidian architecture.'},
+    {word:'Kuthirachettis',meaning:'Local traders who dealt in horses.'},
+    {word:'Amuktamalyada',meaning:'Literary work authored by Krishna Deva Raya.'}
+  ]
+};
+
+function renderLearnContent(body,topicId){
+  const vocab=VOCAB_DATA[topicId]||[];
+  body.innerHTML=`<div class="cards-grid" id="learnGrid"></div>`;
+  const grid=document.getElementById('learnGrid');
+  vocab.forEach(item=>{
+    const card=document.createElement('div');
+    card.className='word-card';
+    card.innerHTML=`<div class="card-emoji">📜</div><div class="word-eng">${item.word}</div><div class="word-meaning">${item.meaning}</div><button class="replay-btn">🔊 Listen</button>`;
+    const play=()=>{unlockAudioEngine();narrateText(item.word+'. '+item.meaning,null,function(){});playSound('click');};
+    card.onclick=play;
+    card.querySelector('.replay-btn').onclick=function(e){e.stopPropagation();play();};
+    grid.appendChild(card);
+  });
+}
+
+function renderActivitiesContent(body,topicId){
+  const blocks={
+    topic1:`
+      <div class="activity-heading">📝 Textbook activities — Two kingdoms</div>
+      <div class="activity-block">
+        <div class="activity-sub"><b>1. Observe the relics.</b> Which monument is linked to Independence Day? Who built it and where?</div>
+        <textarea class="diary-area" placeholder="Red Fort..."></textarea>
+        <button class="reveal-model-btn" onclick="revealModel('t1a1',this)">💡 Show model answer</button>
+        <div class="model-answer-box" id="t1a1">The Red Fort in Delhi. Shah Jahan built it. The Prime Minister hoists the National Flag there on Independence Day. The other relic is Hampi, capital of Vijayanagara.</div>
+      </div>
+      <div class="activity-block">
+        <div class="activity-sub"><b>2. Collect pictures of Mughal kings and prepare an album</b> (textbook task). List the six rulers you will include, with years.</div>
+        <textarea class="diary-area" placeholder="Babur 1526-1530..."></textarea>
+        <button class="reveal-model-btn" onclick="revealModel('t1a2',this)">💡 Show model answer</button>
+        <div class="model-answer-box" id="t1a2">Babur 1526–1530; Humayun 1530–1540 and 1555–1556; Akbar 1556–1605; Jahangir 1605–1627; Shah Jahan 1628–1658; Aurangzeb 1658–1707. Add one picture and one fact for each page of your album.</div>
+      </div>
+      <div class="activity-block">
+        <div class="activity-sub"><b>3. Match the picture idea</b></div>
+        <div class="pic-row">
+          <div class="pic-card"><div class="big">🕌</div><div class="cap">Red Fort / Delhi</div></div>
+          <div class="pic-card"><div class="big">🛕</div><div class="cap">Hampi / Vijayanagara</div></div>
+          <div class="pic-card"><div class="big">🇮🇳</div><div class="cap">Independence Day</div></div>
+        </div>
+        <textarea class="diary-area" placeholder="Write one sentence on why relics help historians."></textarea>
+      </div>`,
+    topic2:`
+      <div class="activity-heading">📝 Textbook activities — Mughals and Panipat</div>
+      <div class="activity-block">
+        <div class="activity-sub"><b>1. Observe the map.</b> List present-day countries where Mughals extended their rule. Afghanistan is given.</div>
+        <div class="tick-row" data-ok="1" onclick="togTick(this)"><input class="chk" type="checkbox"> Afghanistan</div>
+        <div class="tick-row" data-ok="1" onclick="togTick(this)"><input class="chk" type="checkbox"> India</div>
+        <div class="tick-row" data-ok="1" onclick="togTick(this)"><input class="chk" type="checkbox"> Pakistan</div>
+        <div class="tick-row" data-ok="1" onclick="togTick(this)"><input class="chk" type="checkbox"> Bangladesh</div>
+        <div class="tick-row" data-ok="0" onclick="togTick(this)"><input class="chk" type="checkbox"> Japan</div>
+        <div class="tick-row" data-ok="0" onclick="togTick(this)"><input class="chk" type="checkbox"> Australia</div>
+        <button class="check-btn" onclick="checkTicks(this)">✅ Check my ticks</button>
+        <div class="result-msg"></div>
+        <div class="note-box">Under Aurangzeb (1707) the empire also touched parts of present Afghanistan, Pakistan, India and Bangladesh.</div>
+      </div>
+      <div class="activity-block">
+        <div class="activity-sub"><b>2. First Battle of Panipat — fill facts</b></div>
+        <textarea class="diary-area" placeholder="Year / Place / Opponents / Result"></textarea>
+        <button class="reveal-model-btn" onclick="revealModel('t2a2',this)">💡 Show model answer</button>
+        <div class="model-answer-box" id="t2a2">Year: 1526. Place: Panipat, Haryana. Opponents: Babur (Kabul) and Ibrahim Lodi (last Lodi sultan). Result: Babur won and founded Mughal rule in India.</div>
+      </div>
+      <div class="activity-block">
+        <div class="activity-sub"><b>3. Why is the dynasty called Mughal?</b></div>
+        <textarea class="diary-area"></textarea>
+        <button class="reveal-model-btn" onclick="revealModel('t2a3',this)">💡 Show model answer</button>
+        <div class="model-answer-box" id="t2a3">Mughal comes from Mongol. Babur descended from Timur (Turkish, paternal) and Genghis Khan (Mongol, maternal). Europeans used the name Mughal in the 16th century.</div>
+      </div>`,
+    topic3:`
+      <div class="activity-heading">📝 Textbook activities — Akbar</div>
+      <div class="activity-block">
+        <div class="activity-sub"><b>1. What can you understand about Akbar from Pierre du Jarric’s note?</b> The book already gives “Akbar was a powerful ruler.” Add more points.</div>
+        <textarea class="diary-area" placeholder="He treated religions equally..."></textarea>
+        <button class="reveal-model-btn" onclick="revealModel('t3a1',this)">💡 Show model answer</button>
+        <div class="model-answer-box" id="t3a1">• Akbar was a powerful ruler.<br>• Subjects loved, respected and obeyed him.<br>• He gave equal justice without high–low or familiar–unfamiliar distinctions.<br>• He considered Hindu, Christian and Muslim alike.<br>• He treated the strong with force and the weak with mercy.</div>
+      </div>
+      <div class="activity-block">
+        <div class="activity-sub"><b>2. What was Akbar’s aim in building Ibadat Khana?</b> Make notes.</div>
+        <textarea class="diary-area"></textarea>
+        <button class="reveal-model-btn" onclick="revealModel('t3a2',this)">💡 Show model answer</button>
+        <div class="model-answer-box" id="t3a2">To gather scholars of different religions at Fatehpur Sikri (from 1575) so that ideas could be discussed. The aim was religious tolerance and the search for truth, later expressed as sulh-i-kul and Din-i-Ilahi.</div>
+      </div>
+      <div class="activity-block">
+        <div class="activity-sub"><b>3. Class discussion.</b> From Jahangir’s Tuzuk-i-Jahangiri, how far did Akbar’s policies help religious tolerance?</div>
+        <textarea class="diary-area" placeholder="Write 4 points you would say in class."></textarea>
+        <button class="reveal-model-btn" onclick="revealModel('t3a3',this)">💡 Show model answer</button>
+        <div class="model-answer-box" id="t3a3">Sulh-i-kul asked people not to fight other faiths. Jizyah was abolished. Hindus such as Todarmal and Man Singh held high office. Ibadat Khana allowed open debate. These steps reduced official discrimination, though society still had caste and custom differences.</div>
+      </div>
+      <div class="def-box"><h3>Sulh-i-kul</h3>Peace to all. Akbar wanted this idea applied to every community.</div>`,
+    topic4:`
+      <div class="activity-heading">📝 Textbook activities — Army and administration</div>
+      <div class="activity-block">
+        <div class="activity-sub"><b>1. Organise a discussion on the Mansabdari system.</b> Write five talking points.</div>
+        <textarea class="diary-area"></textarea>
+        <button class="reveal-model-btn" onclick="revealModel('t4a1',this)">💡 Show model answer</button>
+        <div class="model-answer-box" id="t4a1">1. Akbar created it to keep a large army without paying every soldier from the treasury.<br>2. Rank = number of cavalry to be maintained.<br>3. Land (jagir-like allotment) was given so the mansabdar could collect tax and pay troops.<br>4. It tied nobles to the emperor because rank and land depended on service.<br>5. Risk: if nobles grew too strong they could later weaken the centre.</div>
+      </div>
+      <div class="activity-block">
+        <div class="activity-sub"><b>2. Arrange the Mughal units from largest to smallest.</b></div>
+        <div class="tick-row" data-ok="1" onclick="togTick(this)"><input class="chk" type="checkbox"> Suba → Sarkar → Pargana → Grama</div>
+        <div class="tick-row" data-ok="0" onclick="togTick(this)"><input class="chk" type="checkbox"> Grama → Suba → Sarkar → Pargana</div>
+        <div class="tick-row" data-ok="0" onclick="togTick(this)"><input class="chk" type="checkbox"> Sarkar → Grama → Suba → Pargana</div>
+        <button class="check-btn" onclick="checkTicks(this)">✅ Check</button>
+        <div class="result-msg"></div>
+      </div>
+      <div class="activity-block">
+        <div class="activity-sub"><b>3. Who heard cases?</b> What if a person was unhappy with the Qazi?</div>
+        <textarea class="diary-area"></textarea>
+        <button class="reveal-model-btn" onclick="revealModel('t4a3',this)">💡 Show model answer</button>
+        <div class="model-answer-box" id="t4a3">Local Qazis investigated and judged disputes. A dissatisfied person could complain directly to the emperor, who was the supreme judge.</div>
+      </div>`,
+    topic5:`
+      <div class="activity-heading">📝 Textbook activities — Society, economy, culture</div>
+      <div class="activity-block">
+        <div class="activity-sub"><b>1. Find the present countries of these Mughal cities.</b></div>
+        <table class="data-table">
+          <tr><th>Mughal city</th><th>Present country</th></tr>
+          <tr><td>Dhaka</td><td>Bangladesh</td></tr>
+          <tr><td>Murshidabad</td><td>India (West Bengal)</td></tr>
+          <tr><td>Lahore</td><td>Pakistan</td></tr>
+          <tr><td>Surat</td><td>India (Gujarat)</td></tr>
+          <tr><td>Agra</td><td>India (Uttar Pradesh)</td></tr>
+        </table>
+        <div class="activity-sub" style="margin-top:8px">Write the completed list in your own words.</div>
+        <textarea class="diary-area"></textarea>
+      </div>
+      <div class="activity-block">
+        <div class="activity-sub"><b>2. Ralph Fitch on Agra and Fatehpur Sikri.</b> What does the description tell us about the economy?</div>
+        <textarea class="diary-area"></textarea>
+        <button class="reveal-model-btn" onclick="revealModel('t5a2',this)">💡 Show model answer</button>
+        <div class="model-answer-box" id="t5a2">The cities were larger and busier than London. Continuous markets between them show surplus farm produce, active trade and urban growth. Agriculture was the base of this wealth.</div>
+      </div>
+      <div class="activity-block">
+        <div class="activity-sub"><b>3. Extended textbook task.</b> Collect pictures and plan a class presentation on cultural integration under the Mughals (architecture, language, music, literature).</div>
+        <textarea class="diary-area" placeholder="Slide 1 Taj Mahal... Slide 2 Urdu..."></textarea>
+        <button class="reveal-model-btn" onclick="revealModel('t5a3',this)">💡 Show model answer</button>
+        <div class="model-answer-box" id="t5a3">Architecture: Taj Mahal, Agra Fort, Red Fort — Indian + Persian styles.<br>Literature: Razmnama; Dara Shukoh’s translations.<br>Language: Urdu from Persian + Hindi.<br>Music: Hindustani music as a synthesis.</div>
+      </div>`,
+    topic6:`
+      <div class="activity-heading">📝 Textbook activities — Vijayanagara</div>
+      <div class="activity-block">
+        <div class="activity-sub"><b>1. List present-day Indian states included in Vijayanagara from the map</b> (core empire under Krishna Deva Raya).</div>
+        <textarea class="diary-area" placeholder="Karnataka..."></textarea>
+        <button class="reveal-model-btn" onclick="revealModel('t6a1',this)">💡 Show model answer</button>
+        <div class="model-answer-box" id="t6a1">Karnataka, Andhra Pradesh, Telangana, Tamil Nadu, and parts of Kerala and Odisha (influence reached the Gajapati frontier). Hampi itself is in present Karnataka.</div>
+      </div>
+      <div class="activity-block">
+        <div class="activity-sub"><b>2. Prepare a note comparing the religious policies of Akbar and Krishna Deva Raya.</b></div>
+        <textarea class="diary-area"></textarea>
+        <button class="reveal-model-btn" onclick="revealModel('t6a2',this)">💡 Show model answer</button>
+        <div class="model-answer-box" id="t6a2"><b>Similar:</b> Both allowed people of many faiths to live and worship. Both used justice to protect that freedom. Both employed talent beyond one community.<br><b>Akbar:</b> Ibadat Khana, Din-i-Ilahi, sulh-i-kul, abolition of Jizyah, high posts for Hindu nobles.<br><b>Krishna Deva Raya:</b> Barbosa notes Christians, Jews, Moors and others could follow their creed; temples and scholars of many languages were patronised.</div>
+      </div>
+      <div class="activity-block">
+        <div class="activity-sub"><b>3. Compare and list Mansabdari and Amara-Nayaka practices.</b></div>
+        <textarea class="diary-area"></textarea>
+        <button class="reveal-model-btn" onclick="revealModel('t6a3',this)">💡 Show model answer</button>
+        <div class="model-answer-box" id="t6a3"><b>Common:</b> Land given to military officers; officers collect tax; they maintain troops for the king; rank linked to military duty.<br><b>Mansabdari:</b> Rank stated as number of cavalry; used across the Mughal empire.<br><b>Amara-Nayaka:</b> Amara land; infantry, horses and elephants; a fixed tribute to the Vijayanagara king.</div>
+      </div>
+      <div class="activity-block">
+        <div class="activity-sub"><b>4. Extended:</b> Create a digital album of Vijayanagara cultural contributions (Hazara Rama, Vitthala stone chariot, Virupaksha, Lotus Mahal, gopurams, Telugu literature).</div>
+        <textarea class="diary-area" placeholder="Caption each monument in one line."></textarea>
+      </div>
+      <div class="activity-block">
+        <div class="activity-sub"><b>5. Seminar indicators:</b> Compare Akbar and Krishna Deva Raya on Governance, Wealth, Culture and Justice.</div>
+        <textarea class="diary-area"></textarea>
+        <button class="reveal-model-btn" onclick="revealModel('t6a5',this)">💡 Show model answer</button>
+        <div class="model-answer-box" id="t6a5"><b>Governance:</b> Both monarchs with officials and provinces (Suba vs mandalam).<br><b>Wealth:</b> Farm surplus, trade (Surat / Hampi markets, horse trade).<br><b>Culture:</b> Akbar — Fatehpur Sikri, translations, Urdu; Krishna Deva Raya — temples, Ashtadiggajas, Amuktamalyada.<br><b>Justice:</b> Emperor / king as highest judge; Qazi vs village courts; both praised for fairness by foreign writers.</div>
+      </div>
+      <div class="activity-block">
+        <div class="activity-sub"><b>6. Complete the common-features table</b> (textbook extended activity).</div>
+        <table class="data-table">
+          <tr><th>Mughal Administration</th><th>Vijayanagara Administration</th></tr>
+          <tr><td>Monarchy</td><td>Monarchy</td></tr>
+          <tr><td>Emperor as supreme judge</td><td>King as appellate authority</td></tr>
+          <tr><td>Ministers / heads of departments</td><td>Cabinet of ministers</td></tr>
+          <tr><td>Suba – Sarkar – Pargana – Grama</td><td>Mandalam – Nadu – Sthala – Grama</td></tr>
+          <tr><td>Mansabdari military land system</td><td>Amara-Nayaka military land system</td></tr>
+          <tr><td>Local Qazi + appeal to emperor</td><td>Village courts + appeal to king</td></tr>
+        </table>
+      </div>`
+  };
+  body.innerHTML=blocks[topicId]||'<p>Choose another topic.</p>';
+  const pairs=MATCH_DATA[topicId];
+  if(pairs && pairs.length){
+    const extra=document.createElement('div');
+    extra.className='activity-block';
+    extra.innerHTML='<div class="activity-sub"><b>Match the following.</b> Tap one item from Column A, then its pair from Column B.</div>';
+    body.appendChild(extra);
+    renderMatchWidget(extra, pairs, 'match-'+topicId);
+  }
+}
+function togTick(el){
+  const box=el.querySelector('.chk');
+  box.checked=!box.checked;
+  el.classList.toggle('good', box.checked);
+  playSound('click');
+}
+function checkTicks(btn){
+  const block=btn.closest('.activity-block');
+  const rows=[...block.querySelectorAll('.tick-row[data-ok]')];
+  let right=0,total=rows.length;
+  rows.forEach(r=>{
+    const ok=r.getAttribute('data-ok')==='1';
+    const on=r.querySelector('.chk').checked;
+    r.classList.remove('good','bad');
+    if(on===ok){r.classList.add('good');right++;}
+    else r.classList.add('bad');
+  });
+  const msg=block.querySelector('.result-msg');
+  msg.innerText='Score: '+right+' / '+total+(right===total?'  Excellent!':'  Green rows match the textbook idea.');
+  if(right===total){state.score+=15;state.stars++;playSound('fanfare');showRewardModal();}
+  else playSound('correct');
+  updateStatsUI();
+}
+
+function renderLabsContent(body,topicId){
+  const labs={
+    topic1:`
+      <div class="activity-heading">🔍 Historian’s enquiry — Relics</div>
+      <div class="exp-box">
+        <h3>Source skill · Monument as evidence</h3>
+        <p>A monument is a primary source in stone. Red Fort tells us about Shah Jahan’s capital, military need and later national memory. Hampi tells us about temple-city planning after 1565 destruction.</p>
+        <p><b>Task:</b> Write two questions a historian would ask while standing at each site.</p>
+        <textarea class="diary-area" placeholder="Who built this? Why was it damaged?"></textarea>
+        <button class="reveal-model-btn" onclick="revealModel('l1',this)">💡 Sample questions</button>
+        <div class="model-answer-box" id="l1">Red Fort: Why red sandstone? How is the fort used in independent India?<br>Hampi: Why was the city abandoned after 1565? What do gopurams tell us about royal patronage?</div>
+      </div>
+      <div class="info-box">Colonel Mackenzie’s 1800 survey is a modern source that reopened Vijayanagara studies. Note the date of the source as well as the date of the event.</div>`,
+    topic2:`
+      <div class="activity-heading">🔍 Enquiry — Battle of Panipat</div>
+      <div class="exp-box">
+        <h3>Cause–event–result chain</h3>
+        <div class="step-card"><b>Cause.</b> Lodi weakness; Babur invited / seeking a base beyond Kabul.</div>
+        <div class="step-card"><b>Event.</b> 1526, Panipat, Haryana — Babur vs Ibrahim Lodi.</div>
+        <div class="step-card"><b>Result.</b> Lodi power ends; Mughal rule begins in India.</div>
+        <button class="sim-btn" onclick="runChain()">▶ Show next card</button>
+        <div class="lab-stage" id="chainSim">Tap to walk the chain.</div>
+      </div>
+      <div class="exp-box">
+        <h3>Ancestry diagram (from the textbook)</h3>
+        <p>Paternal line → Timur (Turkish). Maternal line → Genghis Khan (Mongol). Combined identity → called Mughal by Europeans.</p>
+      </div>`,
+    topic3:`
+      <div class="activity-heading">🔍 Source analysis — Obituary and memoir</div>
+      <div class="exp-box">
+        <h3>Pierre du Jarric (Jesuit) on Akbar, 1605</h3>
+        <p>This is a foreign religious writer’s view. Ask: What did he admire? What might he have missed? Is praise the same as full proof?</p>
+        <textarea class="diary-area" placeholder="He admired equal justice..."></textarea>
+      </div>
+      <div class="exp-box">
+        <h3>Tuzuk-i-Jahangiri</h3>
+        <p>A son recording his father’s orders. Useful, but it is a court memoir — it may highlight ideals. Compare it with the abolition of Jizyah and the presence of Hindu nobles, which are administrative facts.</p>
+      </div>`,
+    topic4:`
+      <div class="activity-heading">🔍 Model the Mansab</div>
+      <div class="exp-box">
+        <h3>Classroom model</h3>
+        <p>Give four students ranks: 10 horse, 50 horse, 100 horse, 500 horse. Each “collects tax” (tokens) from a paper village and “pays troopers”. Discuss why the emperor liked this more than paying every soldier from one chest.</p>
+        <button class="sim-btn" onclick="mansabDemo()">▶ Rank demo</button>
+        <div class="lab-stage" id="mansabSim">Tap to assign a sample mansab.</div>
+      </div>
+      <div class="info-box">Link this later with Amara-Nayakas — same idea, different kingdom.</div>`,
+    topic5:`
+      <div class="activity-heading">🔍 Travelogues as sources</div>
+      <div class="exp-box">
+        <h3>Compare three visitors</h3>
+        <table class="data-table">
+          <tr><th>Writer</th><th>What he noticed</th></tr>
+          <tr><td>Ralph Fitch (English)</td><td>Size of Agra and Fatehpur Sikri; markets</td></tr>
+          <tr><td>Tavernier (French)</td><td>Lifestyle, food, clothing differences</td></tr>
+          <tr><td>Babur (memoir)</td><td>Labour and caste as an insider-outsider king</td></tr>
+        </table>
+        <p>Why do foreigners notice markets and clothes first? What would a farmer’s own voice add?</p>
+        <textarea class="diary-area"></textarea>
+      </div>
+      <div class="exp-box">
+        <h3>Abul Fazl</h3>
+        <p>Advisor and biographer. Ain-i-Akbari and Akbar Nama are official histories — rich in detail, loyal to the court. Use them, but cross-check with travellers.</p>
+      </div>`,
+    topic6:`
+      <div class="activity-heading">🔍 Hampi walk (paper heritage walk)</div>
+      <div class="exp-box">
+        <h3>Stop at four sites</h3>
+        <div class="step-card"><b>Hazara Rama Temple</b> — royal temple; reliefs of the Ramayana.</div>
+        <div class="step-card"><b>Vitthala Temple</b> — stone chariot; musical pillars tradition.</div>
+        <div class="step-card"><b>Virupaksha Temple</b> — still a living temple; tall gopuram.</div>
+        <div class="step-card"><b>Lotus Mahal</b> — courtly, not only sacred, architecture.</div>
+        <p>Write a 6-line “guide talk” a student could give to classmates.</p>
+        <textarea class="diary-area"></textarea>
+      </div>
+      <div class="exp-box">
+        <h3>Domingo Paes</h3>
+        <p>He saw jewels, cloth, horses and fruit in the same street. What does that mix tell us about a capital’s economy?</p>
+      </div>`
+  };
+  body.innerHTML=labs[topicId]||'<p>Choose a topic.</p>';
+}
+let chainN=0, mansabN=0;
+function runChain(){
+  unlockAudioEngine(); playSound('pop');
+  const s=['Cause: Delhi Sultanate under the last Lodi was unstable.','Event: 1526 First Battle of Panipat — Babur defeats Ibrahim Lodi.','Result: Foundation of Mughal rule; capital tradition later centres on Delhi.','Remember: There were later battles of Panipat too — this lesson is only the FIRST.'];
+  document.getElementById('chainSim').innerText=s[chainN%s.length]; chainN++;
+}
+function mansabDemo(){
+  unlockAudioEngine(); playSound('pop');
+  const s=['Mansab 10: small officer, few horsemen, small land.','Mansab 100: mid rank, more cavalry, more tax villages.','Mansab 5000: great noble, large contingent, needs tight loyalty to the emperor.','Point of the system: army without emptying the central treasury every month.'];
+  document.getElementById('mansabSim').innerText=s[mansabN%s.length]; mansabN++;
+}
+
+const QUIZ_DATA={
+  topic1:[
+    {q:'The Red Fort was built during the reign of:',opts:['Babur','Akbar','Shah Jahan','Krishna Deva Raya'],ans:2},
+    {q:'Hampi was the capital of:',opts:['The Lodi dynasty','Vijayanagara','The British Raj','The Cholas only'],ans:1},
+    {q:'Ruins of Hampi were discovered in 1800 by:',opts:['Ralph Fitch','Colonel Mackenzie','Barbosa','Abul Fazl'],ans:1}
+  ],
+  topic2:[
+    {q:'Mughal rule in India began in:',opts:['1336','1526','1565','1857'],ans:1},
+    {q:'The First Battle of Panipat was fought between:',opts:['Akbar and Hemu','Babur and Ibrahim Lodi','Shah Jahan and the Portuguese','Harihara and Bukka'],ans:1},
+    {q:'The name Mughal is derived from:',opts:['Mongol','Mandalam','Muslin','Mansab only'],ans:0},
+    {q:'Mughal capital mentioned in the lesson is:',opts:['Hampi','Delhi','Lisbon','London'],ans:1}
+  ],
+  topic3:[
+    {q:'Ibadat Khana was built at:',opts:['Fatehpur Sikri','Hampi','Panipat','Surat'],ans:0},
+    {q:'Sulh-i-kul means:',opts:['War on all','Peace to all','Tax on pilgrims','A type of fort'],ans:1},
+    {q:'Akbar abolished the tax called:',opts:['Jizyah','Mansab','Amara','Gopuram'],ans:0},
+    {q:'Din-i-Ilahi was created by:',opts:['Aurangzeb','Akbar','Barbosa','Mackenzie'],ans:1}
+  ],
+  topic4:[
+    {q:'Mansabdari was introduced by:',opts:['Babur','Akbar','Krishna Deva Raya','Ibrahim Lodi'],ans:1},
+    {q:'The smallest Mughal unit in the textbook pyramid is:',opts:['Suba','Sarkar','Pargana','Grama'],ans:3},
+    {q:'Local disputes were often heard by a:',opts:['Qazi','Gopuram','Scion','Sericulture officer'],ans:0}
+  ],
+  topic5:[
+    {q:'Ain-i-Akbari was written by:',opts:['Abul Fazl','Barbosa','Paes','Tavernier'],ans:0},
+    {q:'Dhaka is now in:',opts:['Bangladesh','Japan','Sri Lanka','Portugal'],ans:0},
+    {q:'Lahore is now in:',opts:['Pakistan','Nepal','Bhutan','Maldives'],ans:0},
+    {q:'Urdu formed from the fusion of:',opts:['Persian and Hindi','Tamil and Chinese','Latin and Greek','Only Sanskrit'],ans:0}
+  ],
+  topic6:[
+    {q:'Vijayanagara was founded in 1336 by:',opts:['Babur and Humayun','Harihara and Bukka','Shah Jahan and Dara','Todarmal and Birbal'],ans:1},
+    {q:'The most famous Vijayanagara ruler in this lesson is:',opts:['Ibrahim Lodi','Krishna Deva Raya','Aurangzeb','Ralph Fitch'],ans:1},
+    {q:'Amara-Nayakas were:',opts:['Military commanders with land','Only temple dancers','Mughal Qazis','Portuguese governors'],ans:0},
+    {q:'Ashtadiggajas were:',opts:['Eight scholars at Krishna Deva Raya’s court','Eight Mughal subas','Eight rivers','Eight forts of Delhi'],ans:0}
+  ]
+};
+
+function renderQuizContent(body,topicId){
+  const quiz=QUIZ_DATA[topicId]||[];
+  body.innerHTML=`<div id="quizScoreBox" style="display:none" class="quiz-score-box"></div><div id="quizContainer"></div>
+  <div style="text-align:center"><button class="submit-quiz-btn" onclick="submitQuiz('${topicId}')">✅ Check answers</button></div>`;
+  const c=document.getElementById('quizContainer');
+  quiz.forEach((item,qi)=>{
+    const qd=document.createElement('div'); qd.className='quiz-q';
+    qd.innerHTML=`<div class="qtext">${qi+1}. ${item.q}</div><div class="quiz-opts" id="qopts${qi}"></div>`;
+    c.appendChild(qd);
+    const od=qd.querySelector('#qopts'+qi);
+    item.opts.forEach((opt,oi)=>{
+      const b=document.createElement('div'); b.className='quiz-opt'; b.innerText=opt;
+      b.dataset.qi=qi; b.dataset.oi=oi;
+      b.onclick=()=>{document.querySelectorAll('#qopts'+qi+' .quiz-opt').forEach(e=>e.classList.remove('picked')); b.classList.add('picked'); playSound('click');};
+      od.appendChild(b);
+    });
+  });
+}
+function submitQuiz(topicId){
+  const quiz=QUIZ_DATA[topicId]||[];
+  let score=0;
+  quiz.forEach((item,qi)=>{
+    const opts=document.querySelectorAll('#qopts'+qi+' .quiz-opt');
+    const picked=document.querySelector('#qopts'+qi+' .picked');
+    if(picked && parseInt(picked.dataset.oi)===item.ans) score++;
+    opts.forEach(o=>{
+      if(parseInt(o.dataset.oi)===item.ans) o.classList.add('correct-ans');
+      else if(o.classList.contains('picked')) o.classList.add('wrong-ans');
+    });
+  });
+  state.score+=score*10; state.stars+=(score===quiz.length?2:1); updateStatsUI();
+  const box=document.getElementById('quizScoreBox'); box.style.display='block';
+  box.innerHTML=`Score: ${score} / ${quiz.length}  ${score===quiz.length?'Excellent!':'Good try — read the green answers.'}`;
+  playSound(score===quiz.length?'fanfare':'correct');
+  if(score===quiz.length) showRewardModal();
+}
+
+function renderVocabContent(body,topicId){
+  const vocab=VOCAB_DATA[topicId]||[];
+  body.innerHTML=`<table class="vocab-table"><thead><tr><th>Term</th><th>Meaning</th></tr></thead><tbody>${vocab.map(v=>`<tr><td><b>${v.word}</b></td><td>${v.meaning}</td></tr>`).join('')}</tbody></table>`;
+}
+
+function renderDiaryContent(body,topicId){
+  body.innerHTML=`
+  <div class="activity-heading">📔 My History Diary</div>
+  <div class="activity-block">
+    <div class="activity-sub">Name: <input class="diary-area" style="min-height:36px;width:46%;display:inline-block" placeholder="Your name">
+    Class: <input class="diary-area" style="min-height:36px;width:30%;display:inline-block" placeholder="7"></div>
+    <div class="activity-sub">What I learned in this topic</div>
+    <textarea class="diary-area" placeholder="Write dates, names and one source you used..."></textarea>
+    <div class="activity-sub">A question I still have</div>
+    <textarea class="diary-area" placeholder="Why did...?"></textarea>
+    <button class="reveal-model-btn" onclick="revealModel('diaryModel',this)">💡 Sample diary note</button>
+    <div class="model-answer-box" id="diaryModel">Today I learned that two great powers — the Mughals in the north and Vijayanagara in the south — shaped medieval India. Relics such as the Red Fort and Hampi are still with us. Akbar’s sulh-i-kul and Krishna Deva Raya’s openness to many faiths are useful ideas for a diverse country. I used Barbosa and Abul Fazl as sources and noted that court writers can praise kings.</div>
+  </div>`;
+}
+
+function renderRoleplayContent(body,topicId){
+  const plays={
+    topic1:`<b>Guide:</b> Welcome to the Red Fort. Shah Jahan built this in Delhi.<br><b>Child:</b> I have seen the flag here on 15 August!<br><b>Guide:</b> Now look south — Hampi was another capital of the same broad age, the city of Vijayanagara.`,
+    topic2:`<b>Messenger:</b> My lord Babur, Ibrahim Lodi waits at Panipat.<br><b>Babur:</b> Then we fight in 1526. If we win, a new rule begins in Hindustan.<br><b>Soldier:</b> Remember our descent from Timur and the Mongol house — the Franks will call us Mughals.`,
+    topic3:`<b>Scholar 1:</b> Why gather us in the Ibadat Khana?<br><b>Akbar:</b> So that Hindu, Muslim, Christian and others may speak. Peace to all — sulh-i-kul.<br><b>Birbal:</b> And let talent serve the court, not only one community.`,
+    topic4:`<b>Emperor:</b> Your mansab is five hundred horse.<br><b>Officer:</b> Then give me land so I may collect tax and keep the troopers ready.<br><b>Minister:</b> That is how the army is maintained without emptying the treasury.`,
+    topic5:`<b>Ralph Fitch:</b> Agra and Fatehpur Sikri are larger than London!<br><b>Farmer:</b> We grow rice, wheat and sugarcane. If I pay tax I stay on the land.<br><b>Abul Fazl:</b> I shall record the crops and the court in Ain-i-Akbari.`,
+    topic6:`<b>Barbosa:</b> Christian, Jew, Moor or Heathen may live by his creed here.<br><b>Krishna Deva Raya:</b> Build temples, write verses, keep the Amara-Nayakas loyal.<br><b>Paes:</b> In this street I see diamonds, cloth, horses and grapes together!`
+  };
+  body.innerHTML=`<div class="activity-heading">🎭 Role play</div>
+  <div class="activity-block"><div class="activity-sub">${plays[topicId]||''}</div>
+  <button class="read-all-btn" onclick="unlockAudioEngine();narrateText(this.previousElementSibling.innerText.replace(/<[^>]+>/g,' '),null,function(){})">🔊 Listen to the dialogue</button>
+  <p class="activity-sub">Practise in pairs. Add one extra line that a historian might speak from the side of the stage.</p>
+  <textarea class="diary-area" placeholder="Historian: This dialogue is based on..."></textarea></div>`;
+}
+
+function renderCompareContent(body,topicId){
+  body.innerHTML=`
+  <div class="activity-heading">⚖️ Compare the two kingdoms</div>
+  <div class="activity-block">
+    <table class="data-table">
+      <tr><th>Point</th><th>Mughals</th><th>Vijayanagara</th></tr>
+      <tr><td>Founded</td><td>1526, Babur, Panipat</td><td>1336, Harihara and Bukka</td></tr>
+      <tr><td>Famous ruler in lesson</td><td>Akbar (also Shah Jahan for Red Fort)</td><td>Krishna Deva Raya</td></tr>
+      <tr><td>Capital relics</td><td>Delhi, Agra, Fatehpur Sikri</td><td>Hampi</td></tr>
+      <tr><td>Army-land system</td><td>Mansabdari</td><td>Amara-Nayaka</td></tr>
+      <tr><td>Units</td><td>Suba–Sarkar–Pargana–Grama</td><td>Mandalam–Nadu–Sthala–Grama</td></tr>
+      <tr><td>Religious policy</td><td>Sulh-i-kul, Ibadat Khana, no Jizyah under Akbar</td><td>Freedom of creed noted by Barbosa</td></tr>
+      <tr><td>Culture</td><td>Persian–Indian mix, Urdu, Taj Mahal</td><td>Dravidian gopurams, Telugu literature</td></tr>
+    </table>
+    <div class="note-box">Use this table for the textbook seminar on Governance, Wealth, Culture and Justice.</div>
+    <textarea class="diary-area" placeholder="One similarity and one difference I will present..."></textarea>
+  </div>`;
+}
+
+function launchGameMenu(topicId){
+  const T=TOPICS.find(x=>x.id===topicId);
+  const titleEl=document.getElementById('gamesMenuTitle');
+  if(titleEl) titleEl.innerText='🎮 '+(T?T.title:'History Games');
+  const wrap=document.getElementById('gamesButtons');
+  if(!wrap){ startTopicGame(topicId,0); return; }
+  wrap.innerHTML='';
+  const quiz=QUIZ_DATA[topicId]||[];
+  const games=[
+    {name:'▶️ Play all questions', cls:'b3', fn:function(){ startTopicGame(topicId,0); }},
+    {name:'🔗 Match the following', cls:'b14', fn:function(){ startMatchGame(topicId); }},
+    {name:'🎯 Question 1', cls:'b4', fn:function(){ startTopicGame(topicId,0); }},
+    {name:'🎯 Question 2', cls:'b5', fn:function(){ startTopicGame(topicId,1); }},
+    {name:'🎯 Question 3', cls:'b6', fn:function(){ startTopicGame(topicId,2); }}
+  ];
+  games.forEach(function(g){
+    const b=document.createElement('button');
+    b.type='button';
+    b.className='btn-menu '+g.cls;
+    b.textContent=g.name;
+    b.addEventListener('click', function(ev){
+      ev.preventDefault();
+      playSound('click');
+      g.fn();
+    });
+    wrap.appendChild(b);
+  });
+  if(!quiz.length){
+    const p=document.createElement('p');
+    p.textContent='No questions in this topic yet.';
+    wrap.appendChild(p);
+  }
+  showScreen('gamesMenuScreen');
+}
+function startTopicGame(topicId, startIdx){
+  const quiz=QUIZ_DATA[topicId]||[];
+  if(!quiz.length){ alert('No game in this section.'); return; }
+  const idx=Math.max(0, Math.min(startIdx||0, quiz.length-1));
+  showGameQuestion(topicId, idx);
+}
+function showGameQuestion(topicId, idx){
+  const quiz=QUIZ_DATA[topicId]||[];
+  if(!quiz.length){ alert('No game in this section.'); return; }
+  const qObj=quiz[idx % quiz.length];
+  const qEl=document.getElementById('gameQ');
+  const grid=document.getElementById('gameOptionsGrid');
+  const prog=document.getElementById('gameProgress');
+  if(!qEl || !grid){ alert('Game screen missing.'); return; }
+  qEl.textContent=qObj.q;
+  if(prog) prog.textContent='Question '+(idx+1)+' / '+quiz.length;
+  grid.innerHTML='';
+  let locked=false;
+  qObj.opts.forEach(function(opt,i){
+    const btn=document.createElement('button');
+    btn.type='button';
+    btn.className='option-btn';
+    btn.textContent=opt;
+    btn.addEventListener('click', function(){
+      if(locked) return;
+      locked=true;
+      if(i===qObj.ans){
+        btn.classList.add('correct');
+        playSound('correct');
+        state.score+=20; state.stars+=1; updateStatsUI();
+        setTimeout(function(){
+          if(idx+1<quiz.length) showGameQuestion(topicId, idx+1);
+          else { playSound('fanfare'); showRewardModal(); }
+        }, 700);
+      } else {
+        btn.classList.add('wrong');
+        playSound('wrong');
+        state.lives=Math.max(0,state.lives-1); updateStatsUI();
+        Array.prototype.forEach.call(grid.querySelectorAll('.option-btn'), function(b,j){
+          if(j===qObj.ans) b.classList.add('correct');
+        });
+        setTimeout(function(){
+          if(idx+1<quiz.length) showGameQuestion(topicId, idx+1);
+          else showRewardModal();
+        }, 900);
+      }
+    });
+    grid.appendChild(btn);
+  });
+  showScreen('game1Screen');
+}
+
+function renderModelQP(){
+  document.getElementById('modelQPContainer').innerHTML=`
+    <div style="text-align:center;margin-bottom:16px">
+      <h2 style="color:#8B2E2E;font-size:1.35rem">Model Question Paper</h2>
+      <div>Social Science · Class 7 · Unit 1 — Medieval India</div>
+      <div style="font-size:.95rem;color:#555;margin-top:6px">Total: 25 marks · Time: 45 minutes</div>
+    </div>
+    <div class="qp-section">
+      <div class="qp-heading">I. Choose the correct answer (4 × 1 = 4)</div>
+      <div class="qp-q"><span class="qnum">1.</span> The First Battle of Panipat was in<br>(a) 1336 (b) 1526 (c) 1565 (d) 1857</div>
+      <div class="qp-q"><span class="qnum">2.</span> Ibadat Khana was built at<br>(a) Hampi (b) Fatehpur Sikri (c) Surat (d) Dhaka</div>
+      <div class="qp-q"><span class="qnum">3.</span> Amara-Nayakas belong to<br>(a) Vijayanagara (b) The Lodi court only (c) Portuguese Goa (d) Modern Delhi)</div>
+      <div class="qp-q"><span class="qnum">4.</span> Ain-i-Akbari was written by<br>(a) Barbosa (b) Abul Fazl (c) Mackenzie (d) Paes)</div>
+    </div>
+    <div class="qp-section">
+      <div class="qp-heading">II. Answer in two or three sentences (3 × 2 = 6)</div>
+      <div class="qp-q"><span class="qnum">5.</span> Why is the Red Fort familiar to us today?</div>
+      <div class="qp-q"><span class="qnum">6.</span> What is sulh-i-kul?</div>
+      <div class="qp-q"><span class="qnum">7.</span> Who were the Ashtadiggajas?</div>
+    </div>
+    <div class="qp-section">
+      <div class="qp-heading">III. Answer in a paragraph (3 × 5 = 15)</div>
+      <div class="qp-q"><span class="qnum">8.</span> Explain the Mansabdari system.</div>
+      <div class="qp-q"><span class="qnum">9.</span> Describe cultural integration under the Mughals with examples.</div>
+      <div class="qp-q"><span class="qnum">10.</span> Compare the religious policies of Akbar and Krishna Deva Raya.</div>
+    </div>
+    <button class="reveal-model-btn" style="width:100%;margin-top:8px" onclick="revealModel('qpAnswers',this)">💡 Show answer key</button>
+    <div class="model-answer-box" id="qpAnswers">
+      <b>Answers</b><br>
+      1. (b) 1526<br>
+      2. (b) Fatehpur Sikri<br>
+      3. (a) Vijayanagara<br>
+      4. (b) Abul Fazl<br>
+      5. Built by Shah Jahan in Delhi; National Flag is hoisted there on Independence Day.<br>
+      6. Peace to all — core of Akbar’s vision of tolerance.<br>
+      7. Eight great scholars in Krishna Deva Raya’s court.<br>
+      8–10. Write from the lesson: ranks and land for cavalry; Taj / Urdu / Razmnama; Ibadat Khana and Barbosa’s note on freedom of creed.
+    </div>`;
+}
+
+function renderUnitQP(){
+  document.getElementById('unitQPPaper').innerHTML=`
+    <div style="text-align:center;font-size:1.05rem;font-weight:bold">CLASS 7 — SOCIAL SCIENCE (English Medium)</div>
+    <div style="text-align:center;font-size:1.3rem;font-weight:bold;margin:8px 0 4px;text-decoration:underline">UNIT 1 : MEDIEVAL INDIA</div>
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;font-size:.95rem;margin:12px 0 16px;border-bottom:2px solid #333;padding-bottom:10px">
+      <div>Name: _______________________</div>
+      <div>Class / Div: _______</div>
+      <div>Max. marks: 25</div>
+    </div>
+    <div class="qp-section">
+      <div class="qp-heading">1. Fill in the blanks (4 × 1 = 4)</div>
+      <div class="qp-q"><span class="qnum">a.</span> Mughal rule was founded by ______ in 1526.</div>
+      <div class="qp-q"><span class="qnum">b.</span> Akbar built the Ibadat Khana at ______.</div>
+      <div class="qp-q"><span class="qnum">c.</span> Hampi was the capital of ______.</div>
+      <div class="qp-q"><span class="qnum">d.</span> The military land system of Vijayanagara is called the ______ system.</div>
+    </div>
+    <div class="qp-section">
+      <div class="qp-heading">2. Short answers (3 × 2 = 6)</div>
+      <div class="qp-q"><span class="qnum">a.</span> List two present-day countries once under Mughal rule.</div>
+      <div class="qp-q"><span class="qnum">b.</span> What was the aim of the Ibadat Khana?</div>
+      <div class="qp-q"><span class="qnum">c.</span> Name two works of Krishna Deva Raya.</div>
+    </div>
+    <div class="qp-section">
+      <div class="qp-heading">3. Long answers (3 × 5 = 15)</div>
+      <div class="qp-q"><span class="qnum">a.</span> Describe Mughal administration from the emperor down to the village.</div>
+      <div class="qp-q"><span class="qnum">b.</span> How did agriculture and trade show economic progress in the Mughal period?</div>
+      <div class="qp-q"><span class="qnum">c.</span> Compare Mansabdari and Amara-Nayaka systems. Add one point on justice in each kingdom.</div>
+    </div>`;
+}
+
+function downloadUnitQPasPDF(){
+  playSound('click');
+  const paper=document.getElementById('unitQPPaper');
+  if(!paper){alert('Paper not ready');return;}
+  if(typeof html2pdf==='undefined'){
+    alert('PDF tool is not loaded. Use Print → Save as PDF.');
+    return;
+  }
+  html2pdf().set({margin:[10,12,10,12],filename:'Unit1_Medieval_India_SS7.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}}).from(paper).save();
+}
+
+function renderAssess(){
+  document.getElementById('assessBody').innerHTML=`
+    <div class="activity-heading">✅ Let’s Assess — Mixed skills</div>
+    <div class="activity-block">
+      <div class="activity-sub"><b>1.</b> Identify the statement that does NOT suit Akbar’s policy.</div>
+      <div class="quiz-opts" id="as1">
+        <div class="quiz-opt" onclick="pickA(this,'as1')">a. Built Ibadat Khana for many faiths</div>
+        <div class="quiz-opt" onclick="pickA(this,'as1')">b. Abolished Jizyah</div>
+        <div class="quiz-opt" data-ans="1" onclick="pickA(this,'as1')">c. Refused any Hindu officer in court</div>
+        <div class="quiz-opt" onclick="pickA(this,'as1')">d. Spoke of sulh-i-kul</div>
+      </div>
+    </div>
+    <div class="activity-block">
+      <div class="activity-sub"><b>2.</b> Match the following correctly. Tap one from A, then its pair from B.</div>
+      <div id="assessMatchMount"></div>
+    </div>
+    <div class="activity-block">
+      <div class="activity-sub"><b>3.</b> Cities and countries — tick the right pair only.</div>
+      <div class="tick-row" data-ok="1" onclick="togTick(this)"><input class="chk" type="checkbox"> Dhaka — Bangladesh</div>
+      <div class="tick-row" data-ok="1" onclick="togTick(this)"><input class="chk" type="checkbox"> Lahore — Pakistan</div>
+      <div class="tick-row" data-ok="1" onclick="togTick(this)"><input class="chk" type="checkbox"> Surat — India</div>
+      <div class="tick-row" data-ok="0" onclick="togTick(this)"><input class="chk" type="checkbox"> Agra — Portugal</div>
+      <button class="check-btn" onclick="checkTicks(this)">✅ Check</button>
+      <div class="result-msg"></div>
+    </div>
+    <div class="activity-block">
+      <div class="activity-sub"><b>4.</b> Why are travelogues useful and why must we be careful?</div>
+      <textarea class="diary-area"></textarea>
+      <button class="reveal-model-btn" onclick="revealModel('as4',this)">💡 Show model answer</button>
+      <div class="model-answer-box" id="as4">Useful: they describe cities, markets, clothes and freedom that official books may skip. Careful: visitors compare India with their own home (London, Portugal) and may miss village life or exaggerate wonder.</div>
+    </div>
+    <div class="activity-heading">Extended classroom tasks</div>
+    <div class="activity-block">
+      <div class="activity-sub">1. Digital album — Vijayanagara culture. 2. Seminar — Akbar vs Krishna Deva Raya (Governance, Wealth, Culture, Justice). 3. Presentation — Mughal cultural integration. 4. Debate: “Religious tolerance is the strength of a large kingdom.”</div>
+      <textarea class="diary-area" placeholder="My seminar outline..."></textarea>
+    </div>`;
+  const mount=document.getElementById('assessMatchMount');
+  if(mount) renderMatchWidget(mount, MATCH_DATA.sources, 'match-assess-sources');
+}
+function startMatchGame(topicId){
+  const pairs=MATCH_DATA[topicId]||MATCH_DATA.sources;
+  document.getElementById('contentTitle').innerText='🔗 Match the following';
+  const body=document.getElementById('contentBody');
+  body.innerHTML='<div class="activity-heading">Match Column A with Column B</div><div class="activity-block" id="gameMatchMount"><div class="activity-sub">Tap one item from A, then the matching item from B. Then tap Check matches.</div></div>';
+  renderMatchWidget(document.getElementById('gameMatchMount'), pairs, 'match-game-'+topicId);
+  showScreen('contentScreen');
+}
+function pickA(el,gid){
+  const all=document.querySelectorAll('#'+gid+' .quiz-opt');
+  all.forEach(x=>{x.classList.remove('picked','correct-ans','wrong-ans');});
+  el.classList.add('picked');
+  const isRight=el.getAttribute('data-ans')==='1';
+  if(isRight){el.classList.add('correct-ans');playSound('correct');state.score+=10;updateStatsUI();}
+  else {el.classList.add('wrong-ans');playSound('wrong');
+    all.forEach(x=>{if(x.getAttribute('data-ans')==='1') x.classList.add('correct-ans');});
+  }
+}
+
+function renderTimeline(){
+  document.getElementById('timelineBody').innerHTML=`
+    <div class="activity-heading">⏳ Place the events</div>
+    <div class="tl">
+      <div class="tl-item"><b>1336 CE</b> — Harihara and Bukka found Vijayanagara.</div>
+      <div class="tl-item"><b>1509–1529</b> — Krishna Deva Raya rules; Barbosa and Paes visit the prosperous capital.</div>
+      <div class="tl-item"><b>1526</b> — First Battle of Panipat; Babur founds Mughal rule.</div>
+      <div class="tl-item"><b>1556–1605</b> — Akbar; Ibadat Khana (1575); sulh-i-kul; Mansabdari.</div>
+      <div class="tl-item"><b>1565</b> — Vijayanagara city destroyed; memory remains as Hampi.</div>
+      <div class="tl-item"><b>1605–1627 / 1628–1658 / 1658–1707</b> — Jahangir, Shah Jahan (Red Fort, Taj Mahal), Aurangzeb (widest map in the lesson).</div>
+      <div class="tl-item"><b>1800</b> — Colonel Mackenzie records the ruins of Hampi.</div>
+      <div class="tl-item"><b>1857</b> — Formal end of Mughal rule mentioned in the lesson.</div>
+    </div>
+    <div class="note-box">Notice that Vijayanagara began earlier, overlapped with the early Mughals, and fell as a city in 1565 while Mughal power was still rising under Akbar.</div>
+    <button class="read-all-btn" onclick="unlockAudioEngine();narrateText('Thirteen thirty six, Vijayanagara founded. Fifteen twenty six, First Battle of Panipat. Fifteen seventy five, Ibadat Khana. Fifteen sixty five, Hampi city destroyed. Eighteen hundred, Mackenzie surveys the ruins.',null,function(){})">🔊 Hear the spine of the timeline</button>
+  `;
+}
+
+function primeAudioFromUserGesture(){
+  if(!audioUnlocked) unlockAudioEngine();
+  else {
+    const ctx=ensureCtx();
+    if(ctx && ctx.state==='suspended' && ctx.resume) ctx.resume().catch(function(){});
+  }
+}
+['pointerdown','touchstart','click'].forEach(function(ev){
+  document.addEventListener(ev, primeAudioFromUserGesture, {passive:true});
+});
+window.onload=function(){
+  updateStatsUI();
+  showSoundBannerIfNeeded();
+  warmVoices();
+  const s=document.createElement('script');
+  s.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+  s.async=true; document.head.appendChild(s);
+};
+</script>
+</body>
+</html>
