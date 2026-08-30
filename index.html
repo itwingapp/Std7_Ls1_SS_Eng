@@ -178,7 +178,7 @@ button, .btn-menu, .icon-btn, .option-btn, .quiz-opt, .match-item, .lesson-pick 
 </div>
 </header>
 <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
-<div class="sound-banner" id="soundBanner" onclick="unlockAudioEngine();playSound('fanfare');setTimeout(function(){narrateText('Sound is on. Clear English reading is ready.',null,function(){});},300);">🔊 Tap here once to enable clear English voice</div>
+<div class="sound-banner" id="soundBanner" onclick="unlockAudioEngine();playSound('click');">🔊 Tap once to enable English voice</div>
 <audio id="voicePlayer" playsinline webkit-playsinline preload="auto"></audio>
 <audio id="fxPlayer" playsinline webkit-playsinline preload="auto"></audio>
 
@@ -251,8 +251,8 @@ button, .btn-menu, .icon-btn, .option-btn, .quiz-opt, .match-item, .lesson-pick 
 <div class="section-header"><div class="section-title">ℹ️ Instructions</div><button class="back-btn" onclick="showScreen('homeScreen')">Back</button></div>
 <div class="content-box"><div class="instructions-list">
 <ul>
-<li>Tap the orange banner or <b>Test Sound</b> once, then raise device volume. English Text-to-Speech on the device is used for clear reading.</li>
-<li><b>Read Lesson</b> reads each paragraph in clear English. Words highlight while spoken. Use the blue 🔊 on every paragraph.</li>
+<li>Raise device volume, then open <b>Read Lesson</b>.</li>
+<li>Tap the blue 🔊 on any paragraph, or <b>Read All</b>, for smooth sweet English reading. Words highlight while spoken.</li>
 <li><b>Activities</b> include every textbook task (map list, notes, discussions, comparison tables).</li>
 <li><b>Sources &amp; Enquiry</b> trains you to read travelogues, obituaries and memoirs like a historian.</li>
 <li><b>Unit Question Paper</b> can be printed or saved as PDF for exam practice.</li>
@@ -378,11 +378,13 @@ function startKeepAlive(){
 }
 let cachedEnglishVoice=null;
 let voicesReady=false;
+let activeAudioEl=null;
+let speechWatchTimer=null;
 
 function unlockAudioEngine(){
   audioUnlocked=true;
   const b=document.getElementById('soundBanner');
-  if(b){b.classList.add('on');b.classList.remove('show');b.innerText='🔊 Sound is ON — clear English voice is ready';}
+  if(b){b.classList.add('on');b.classList.remove('show');b.innerText='🔊 Sound is ON — clear English reading is ready';}
   const ctx=ensureCtx();
   if(ctx && ctx.state==='suspended' && ctx.resume) ctx.resume().catch(function(){});
   startKeepAlive();
@@ -392,14 +394,13 @@ function unlockAudioEngine(){
     if(!el) return;
     try{ el.muted=false; el.volume=1; const pr=el.play(); if(pr&&pr.catch) pr.catch(function(){}); el.pause(); }catch(e){}
   });
-  /* Wake speech engine inside user gesture (needed in WebView / internal apps) */
   if(hasSpeech()){
     try{
       window.speechSynthesis.cancel();
-      const wake=new SpeechSynthesisUtterance(' ');
+      const wake=new SpeechSynthesisUtterance('.');
       wake.volume=0.01; wake.rate=2; wake.lang='en-IN';
       window.speechSynthesis.speak(wake);
-      setTimeout(function(){ try{ window.speechSynthesis.cancel(); }catch(e){} }, 30);
+      setTimeout(function(){ try{ window.speechSynthesis.cancel(); }catch(e){} }, 40);
     }catch(e){}
     warmVoices();
   }
@@ -438,7 +439,9 @@ function playSound(type){
   else if(type==='pop') playInternalWav(toneSamples(880,.08,.24,'square'),SR,'fxPlayer');
 }
 function hasSpeech(){
-  return typeof window!=='undefined' && 'speechSynthesis' in window && typeof SpeechSynthesisUtterance!=='undefined';
+  try{
+    return typeof window!=='undefined' && 'speechSynthesis' in window && typeof SpeechSynthesisUtterance!=='undefined';
+  }catch(e){ return false; }
 }
 function pickEnglishVoice(){
   if(!hasSpeech()) return null;
@@ -446,9 +449,12 @@ function pickEnglishVoice(){
   if(!voices.length) return cachedEnglishVoice;
   const score=function(v){
     const n=(v.name||'')+' '+(v.lang||'');
-    if(/en-IN|English \(India\)|Ravi|Heera|Google UK English Female|Google UK English Male/i.test(n)) return 6;
-    if(/en-GB|British|Daniel|Kate|Serena|Google UK/i.test(n)) return 5;
-    if(/en-US|US English|Samantha|Alex|Google US|Microsoft.*English/i.test(n)) return 4;
+    /* Prefer smooth female English voices for sweet narration */
+    if(/en-IN.*(Female|Heera)|Heera|English India.*Female/i.test(n)) return 10;
+    if(/Samantha|Karen|Moira|Tessa|Victoria|Fiona|Serena|Kate|Google UK English Female|Microsoft Zira|Female.*en/i.test(n)) return 9;
+    if(/en-GB.*Female|en-US.*Female|en-IN/i.test(n)) return 8;
+    if(/en-GB|British|Google UK/i.test(n)) return 6;
+    if(/en-US|US English|Google US|Microsoft.*English/i.test(n)) return 5;
     if(/^en[-_]/i.test(v.lang||'') || /English/i.test(n)) return 3;
     return 0;
   };
@@ -463,44 +469,63 @@ function warmVoices(){
     const list=window.speechSynthesis.getVoices()||[];
     if(list.length) pickEnglishVoice();
   }catch(e){}
-  if(typeof window.speechSynthesis.onvoiceschanged!=='undefined'){
-    window.speechSynthesis.onvoiceschanged=function(){ pickEnglishVoice(); };
-  }
-  if(typeof window.speechSynthesis.addEventListener==='function'){
-    try{ window.speechSynthesis.addEventListener('voiceschanged', function(){ pickEnglishVoice(); }); }catch(e){}
-  }
-  /* Android WebView sometimes loads voices late — poll briefly */
+  try{ window.speechSynthesis.onvoiceschanged=function(){ pickEnglishVoice(); }; }catch(e){}
   let tries=0;
   const poll=setInterval(function(){
     tries++;
-    const v=window.speechSynthesis.getVoices()||[];
-    if(v.length || tries>25){ clearInterval(poll); if(v.length) pickEnglishVoice(); }
+    try{
+      const v=window.speechSynthesis.getVoices()||[];
+      if(v.length || tries>20){ clearInterval(poll); if(v.length) pickEnglishVoice(); }
+    }catch(e){ clearInterval(poll); }
   }, 200);
+}
+function restoreParaText(paraEl){
+  if(!paraEl) return;
+  const p=paraEl.querySelector('p');
+  if(!p) return;
+  if(paraEl.dataset.origText){
+    p.textContent=paraEl.dataset.origText;
+  } else {
+    /* strip highlight spans only */
+    p.querySelectorAll('.nw,.word-hl').forEach(function(){});
+    const plain=p.innerText || p.textContent;
+    p.textContent=plain;
+  }
+  paraEl.classList.remove('reading');
 }
 function stopNarrator(full){
   narratorStop=true;
   if(narratorTimer){ try{ clearInterval(narratorTimer); }catch(e){} try{ clearTimeout(narratorTimer); }catch(e){} narratorTimer=null; }
+  if(speechWatchTimer){ try{ clearTimeout(speechWatchTimer); }catch(e){} speechWatchTimer=null; }
   if(full!==false) state.readingAll=false;
   if(activeSource){ try{ activeSource.stop(0); }catch(e){} activeSource=null; }
-  if(hasSpeech()){
-    try{ window.speechSynthesis.cancel(); }catch(e){}
+  if(hasSpeech()){ try{ window.speechSynthesis.cancel(); }catch(e){} }
+  if(activeAudioEl){
+    try{ activeAudioEl.pause(); activeAudioEl.removeAttribute('src'); activeAudioEl.load(); }catch(e){}
+    activeAudioEl=null;
   }
   const v=document.getElementById('voicePlayer');
-  if(v){try{v.pause(); v.removeAttribute('src');}catch(e){}}
-  document.querySelectorAll('.story-para.reading').forEach(e=>e.classList.remove('reading'));
-  document.querySelectorAll('.word-hl').forEach(e=>{const t=e.textContent; e.replaceWith(document.createTextNode(t));});
+  if(v){ try{ v.pause(); v.removeAttribute('src'); }catch(e){} }
+  document.querySelectorAll('.story-para.reading').forEach(function(el){ restoreParaText(el); });
+  document.querySelectorAll('.word-hl').forEach(function(e){
+    const t=e.textContent; e.replaceWith(document.createTextNode(t));
+  });
 }
 function wrapWords(paraEl, words){
   if(!paraEl) return;
-  paraEl.classList.add('reading');
   const p=paraEl.querySelector('p');
-  if(p){
-    p.innerHTML=words.map((w,i)=>/\s+/.test(w)?w:`<span class="nw" data-i="${i}">${w}</span>`).join('');
+  if(!p) return;
+  if(!paraEl.dataset.origText){
+    paraEl.dataset.origText=p.innerText || p.textContent || '';
   }
+  paraEl.classList.add('reading');
+  p.innerHTML=words.map(function(w,i){
+    return /\s+/.test(w)?w:('<span class="nw" data-i="'+i+'">'+w+'</span>');
+  }).join('');
 }
 function highlightWord(paraEl, index){
   if(!paraEl) return;
-  paraEl.querySelectorAll('.word-hl').forEach(e=>e.classList.remove('word-hl'));
+  paraEl.querySelectorAll('.word-hl').forEach(function(e){ e.classList.remove('word-hl'); });
   const span=paraEl.querySelector('.nw[data-i="'+index+'"]');
   if(span){
     span.classList.add('word-hl');
@@ -514,132 +539,226 @@ function wordIndexAtChar(words, charIndex){
     if(charIndex>=pos && charIndex<next) return i;
     pos=next;
   }
-  return words.length-1;
+  return Math.max(0, words.length-1);
 }
-/* Split long text into sentence chunks so speech never cuts off in WebView */
-function splitIntoChunks(text){
+function splitIntoChunks(text, maxLen){
+  const limit=maxLen||160;
   const t=String(text||'').trim();
   if(!t) return [];
-  if(t.length<=180) return [t];
-  const parts=t.match(/[^.!?]+[.!?]+[\s]*/g) || [t];
+  if(t.length<=limit) return [t];
+  const parts=t.match(/[^.!?]+[.!?]+[\s]*/g) || t.split(/\s+/);
   const chunks=[];
   let buf='';
   parts.forEach(function(p){
-    if((buf+p).length>220 && buf){ chunks.push(buf.trim()); buf=p; }
-    else buf+=p;
+    if((buf+' '+p).trim().length>limit && buf){ chunks.push(buf.trim()); buf=p; }
+    else buf=(buf?buf+' ':'')+p;
   });
   if(buf.trim()) chunks.push(buf.trim());
   return chunks.length?chunks:[t];
 }
-function speakWithTTS(text, paraEl, onend){
+/* Build list of clear sweet-voice audio URL candidates for a text chunk */
+function ttsAudioUrls(chunk){
+  const q=encodeURIComponent(chunk);
+  return [
+    'https://api.streamelements.com/kappa/v2/speech?voice=Amy&text='+q,
+    'https://api.streamelements.com/kappa/v2/speech?voice=Emma&text='+q,
+    'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en&q='+q
+  ];
+}
+function speakWithAudioTTS(text, paraEl, onend){
   const full=String(text||'').trim();
   if(!full){ if(onend) onend(false); return; }
-  const words=full.split(/(\s+)/).filter(s=>s.length);
+  const words=full.split(/(\s+)/).filter(function(s){ return s.length; });
   wrapWords(paraEl, words);
-  const chunks=splitIntoChunks(full);
+  const chunks=splitIntoChunks(full, 200);
+  let ci=0;
+  let wordPtr=0;
+  let hlTimer=null;
+
+  function finish(ok){
+    if(hlTimer){ clearInterval(hlTimer); hlTimer=null; }
+    restoreParaText(paraEl);
+    if(onend) onend(!!ok);
+  }
+  function advanceHighlight(chunk){
+    if(hlTimer){ clearInterval(hlTimer); hlTimer=null; }
+    const cw=chunk.split(/(\s+)/).filter(function(s){ return s.length; });
+    let k=0;
+    const step=Math.max(160, Math.floor(1100/Math.max(1,cw.length)));
+    hlTimer=setInterval(function(){
+      if(narratorStop || k>=cw.length){ clearInterval(hlTimer); hlTimer=null; return; }
+      if(!/\s+/.test(cw[k])){
+        highlightWord(paraEl, wordPtr);
+        wordPtr++;
+      }
+      k++;
+    }, step);
+  }
+  function playChunkWithUrls(urls, ui){
+    if(narratorStop){ finish(false); return; }
+    if(ui>=urls.length){
+      /* all backends failed for this chunk — skip to next */
+      ci++;
+      if(ci>=chunks.length) finish(false);
+      else playNext();
+      return;
+    }
+    const audio=document.getElementById('voicePlayer');
+    if(!audio){ finish(false); return; }
+    activeAudioEl=audio;
+    audio.muted=false;
+    audio.volume=1;
+    try{ audio.playbackRate=0.96; }catch(e){}
+    const onOk=function(){
+      audio.onended=null; audio.onerror=null;
+      ci++;
+      if(narratorStop) finish(false);
+      else if(ci>=chunks.length) finish(true);
+      else setTimeout(playNext, 200);
+    };
+    const onFail=function(){
+      audio.onended=null; audio.onerror=null;
+      playChunkWithUrls(urls, ui+1);
+    };
+    audio.onended=onOk;
+    audio.onerror=onFail;
+    try{
+      audio.src=urls[ui];
+      const p=audio.play();
+      if(p && p.catch) p.catch(onFail);
+    }catch(e){ onFail(); }
+  }
+  function playNext(){
+    if(narratorStop){ finish(false); return; }
+    if(ci>=chunks.length){ finish(true); return; }
+    const chunk=chunks[ci];
+    advanceHighlight(chunk);
+    playChunkWithUrls(ttsAudioUrls(chunk), 0);
+  }
+  /* Start immediately (must stay in user-gesture chain for mobile WebView) */
+  playNext();
+}
+function speakWithSystemTTS(text, paraEl, onend){
+  const full=String(text||'').trim();
+  if(!full){ if(onend) onend(false); return; }
+  if(!hasSpeech()){ speakWithAudioTTS(full, paraEl, onend); return; }
+
+  const words=full.split(/(\s+)/).filter(function(s){ return s.length; });
+  wrapWords(paraEl, words);
+  const chunks=splitIntoChunks(full, 220);
   let ci=0;
   let charOffset=0;
-  /* Prevent Chrome/WebView from pausing speech after ~15s */
+  let started=false;
+  let finished=false;
+
   if(narratorTimer){ clearInterval(narratorTimer); narratorTimer=null; }
   narratorTimer=setInterval(function(){
     if(narratorStop){ clearInterval(narratorTimer); narratorTimer=null; return; }
     try{
-      if(window.speechSynthesis.speaking && window.speechSynthesis.paused){
-        window.speechSynthesis.resume();
-      }
+      if(window.speechSynthesis.speaking && window.speechSynthesis.paused) window.speechSynthesis.resume();
     }catch(e){}
-  }, 4000);
+  }, 3000);
 
   function finish(ok){
+    if(finished) return;
+    finished=true;
     if(narratorTimer){ clearInterval(narratorTimer); narratorTimer=null; }
-    if(paraEl) paraEl.classList.remove('reading');
-    if(onend) onend(ok);
+    if(speechWatchTimer){ clearTimeout(speechWatchTimer); speechWatchTimer=null; }
+    restoreParaText(paraEl);
+    if(onend) onend(!!ok);
   }
-
   function speakNext(){
     if(narratorStop){ finish(false); return; }
     if(ci>=chunks.length){ finish(true); return; }
     const chunk=chunks[ci];
     const u=new SpeechSynthesisUtterance(chunk);
     u.lang='en-IN';
-    u.rate=0.9;
-    u.pitch=1.0;
-    u.volume=1.0;
+    u.rate=0.88;
+    u.pitch=1.08;
+    u.volume=1;
     const voice=pickEnglishVoice();
-    if(voice){
-      try{ u.voice=voice; }catch(e){}
-      if(voice.lang) u.lang=voice.lang;
-    }
+    if(voice){ try{ u.voice=voice; }catch(e){} if(voice.lang) u.lang=voice.lang; }
+    u.onstart=function(){ started=true; };
     u.onboundary=function(ev){
       if(narratorStop || !paraEl) return;
       if(typeof ev.charIndex==='number'){
         const idx=wordIndexAtChar(words, charOffset+ev.charIndex);
-        if(idx!=null && !/^\s+$/.test(words[idx]||'')) highlightWord(paraEl, idx);
+        if(idx!=null && !/\s+/.test(words[idx]||'')) highlightWord(paraEl, idx);
       }
     };
     u.onend=function(){
       charOffset+=chunk.length+1;
       ci++;
-      if(!narratorStop) setTimeout(speakNext, 50);
+      if(!narratorStop) setTimeout(speakNext, 60);
     };
     u.onerror=function(){
       charOffset+=chunk.length+1;
       ci++;
-      if(!narratorStop) setTimeout(speakNext, 50);
+      if(!narratorStop) setTimeout(speakNext, 60);
     };
     try{
       if(window.speechSynthesis.paused) window.speechSynthesis.resume();
       window.speechSynthesis.speak(u);
-    }catch(e){
-      finish(false);
-    }
+    }catch(e){ finish(false); }
   }
+  /* Speak IMMEDIATELY — do not wait for voices (user-gesture safe) */
+  try{ window.speechSynthesis.cancel(); }catch(e){}
   speakNext();
+
+  /* If nothing starts within 1.2s, switch to clear online Amy voice */
+  speechWatchTimer=setTimeout(function(){
+    if(narratorStop || finished) return;
+    if(!started){
+      try{ window.speechSynthesis.cancel(); }catch(e){}
+      finished=true;
+      if(narratorTimer){ clearInterval(narratorTimer); narratorTimer=null; }
+      speakWithAudioTTS(full, paraEl, onend);
+    }
+  }, 1200);
 }
 function narrateText(text, paraEl, onend){
   const keepEnabled=state.audioEnabled;
   const keepAll=state.readingAll;
-  stopNarrator(false);
+  /* Soft stop previous without blocking new start */
+  narratorStop=true;
+  if(narratorTimer){ try{ clearInterval(narratorTimer); }catch(e){} try{ clearTimeout(narratorTimer); }catch(e){} narratorTimer=null; }
+  if(speechWatchTimer){ try{ clearTimeout(speechWatchTimer); }catch(e){} speechWatchTimer=null; }
+  if(activeSource){ try{ activeSource.stop(0); }catch(e){} activeSource=null; }
+  if(hasSpeech()){ try{ window.speechSynthesis.cancel(); }catch(e){} }
+  if(activeAudioEl){
+    try{ activeAudioEl.pause(); }catch(e){}
+  }
+  document.querySelectorAll('.story-para.reading').forEach(function(el){ restoreParaText(el); });
+
   narratorStop=false;
   state.readingAll=keepAll;
   state.audioEnabled=keepEnabled;
   if(!state.audioEnabled){ if(onend) onend(false); return; }
-  unlockAudioEngine();
-  warmVoices();
+
+  /* Unlock audio NOW inside the click gesture */
+  audioUnlocked=true;
+  const ctx=ensureCtx();
+  if(ctx && ctx.state==='suspended' && ctx.resume) ctx.resume().catch(function(){});
+  const vEl=document.getElementById('voicePlayer');
+  if(vEl){ try{ vEl.muted=false; vEl.volume=1; }catch(e){} }
+
   const clean=String(text||'').replace(/\s+/g,' ').trim();
   if(!clean){ if(onend) onend(false); return; }
 
-  if(hasSpeech()){
-    try{ window.speechSynthesis.cancel(); }catch(e){}
-    /* Ensure voices loaded before first speak (important for internal WebView) */
-    const start=function(){
-      if(narratorStop){ if(onend) onend(false); return; }
-      speakWithTTS(clean, paraEl, onend);
-    };
-    const voices=window.speechSynthesis.getVoices()||[];
-    if(voices.length || voicesReady){
-      start();
-    } else {
-      let waited=0;
-      const waitVoices=setInterval(function(){
-        waited++;
-        const v=window.speechSynthesis.getVoices()||[];
-        if(v.length || waited>15){
-          clearInterval(waitVoices);
-          pickEnglishVoice();
-          start();
-        }
-      }, 100);
-    }
-    return;
-  }
-  /* No system TTS: show clear message instead of noisy synthetic speech */
   if(paraEl){
-    paraEl.classList.add('reading');
     const p=paraEl.querySelector('p');
-    if(p) p.innerHTML='<span style="color:#C62828">⚠️ Enable English Text-to-Speech in device settings, then tap again.</span>';
+    if(p && !paraEl.dataset.origText){
+      paraEl.dataset.origText=p.innerText || p.textContent || clean;
+    }
   }
-  if(onend) onend(false);
+
+  /* Prefer clear sweet online voice first in internal apps; system TTS as parallel option */
+  if(hasSpeech()){
+    try{ pickEnglishVoice(); }catch(e){}
+    speakWithSystemTTS(clean, paraEl, onend);
+  } else {
+    speakWithAudioTTS(clean, paraEl, onend);
+  }
 }
 function speakText(text,onend){ narrateText(text, null, onend); }
 function toggleAudio(){
@@ -995,9 +1114,8 @@ function renderRead(body,topicId){
   body.innerHTML=`<div class="story-title-wrap"><span class="story-title">${T?T.title:''}</span></div>
   <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:10px">
   <button class="read-all-btn" id="readAllBtn" type="button">🔊 Read All / Stop</button>
-  <button class="read-all-btn" type="button" id="testSoundBtn" style="background:linear-gradient(135deg,#FF8F00,#E65100)">🔈 Test Sound</button>
   </div>
-  <div class="note-box">1) Tap <b>Test Sound</b> once (device volume up). 2) Tap the blue 🔊 on any paragraph for clear English reading. Works with device Text-to-Speech (English).</div>
+  <div class="note-box">Tap the blue 🔊 on any paragraph, or <b>Read All</b>, for smooth English reading. Raise device volume first.</div>
   <div id="storyParas"></div>`;
   const paras=document.getElementById('storyParas');
   lines.forEach((line,idx)=>{
@@ -1016,15 +1134,6 @@ function renderRead(body,topicId){
       narrateText(line, div, function(){});
     });
   });
-  const testBtn=document.getElementById('testSoundBtn');
-  if(testBtn) testBtn.addEventListener('click', function(ev){
-    ev.preventDefault();
-    unlockAudioEngine();
-    playSound('fanfare');
-    setTimeout(function(){
-      narrateText('Sound is working correctly. This is the clear English narrator for Medieval India.', null, function(){});
-    }, 350);
-  });
   const readAllBtn=document.getElementById('readAllBtn');
   readAllBtn.addEventListener('click', function(ev){
     ev.preventDefault();
@@ -1036,7 +1145,6 @@ function renderRead(body,topicId){
     }
     state.readingAll=true;
     this.innerText='⏹ Stop reading';
-    /* Read paragraph by paragraph for clear, reliable TTS in apps */
     let pi=0;
     function readNextPara(){
       if(!state.readingAll || narratorStop || pi>=lines.length){
@@ -1049,7 +1157,7 @@ function renderRead(body,topicId){
       const text=lines[pi];
       pi++;
       narrateText(text, div, function(ok){
-        if(state.readingAll && !narratorStop) setTimeout(readNextPara, 200);
+        if(state.readingAll && !narratorStop) setTimeout(readNextPara, 280);
         else {
           state.readingAll=false;
           const b=document.getElementById('readAllBtn');
