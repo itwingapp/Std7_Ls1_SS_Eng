@@ -170,7 +170,6 @@ button, .btn-menu, .icon-btn, .option-btn, .quiz-opt, .match-item, .lesson-pick 
 <div class="logo-area" onclick="showScreen('homeScreen')"><div style="font-size:1.7rem">🏰</div><div><h1>Medieval India</h1><span>STD 7 · SOCIAL SCIENCE UNIT 1</span><div class="sub">Class 7 • Social Science • English Medium</div></div></div>
 <div class="stats-bar"><div class="stat-item">⭐ <span id="valScore">0</span></div><div class="stat-item">❤️ <span id="valLives">5</span></div><div class="stat-item">🏆 <span id="valStars">0</span></div></div>
 <div class="controls">
-<button class="icon-btn" id="btnAudioToggle" onclick="toggleAudio()" title="Sound">🔊</button>
 <button class="icon-btn" onclick="printPage()" title="Print">🖨️</button>
 <button class="icon-btn" onclick="downloadPage()" title="Download">⬇️</button>
 <button class="icon-btn" onclick="toggleFullscreen()" title="Full Screen">⛶</button>
@@ -178,7 +177,6 @@ button, .btn-menu, .icon-btn, .option-btn, .quiz-opt, .match-item, .lesson-pick 
 </div>
 </header>
 <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
-<div class="sound-banner" id="soundBanner" onclick="unlockAudioEngine();playSound('click');">🔊 Tap once to enable English voice</div>
 <audio id="voicePlayer" playsinline webkit-playsinline preload="auto"></audio>
 <audio id="fxPlayer" playsinline webkit-playsinline preload="auto"></audio>
 
@@ -251,8 +249,7 @@ button, .btn-menu, .icon-btn, .option-btn, .quiz-opt, .match-item, .lesson-pick 
 <div class="section-header"><div class="section-title">ℹ️ Instructions</div><button class="back-btn" onclick="showScreen('homeScreen')">Back</button></div>
 <div class="content-box"><div class="instructions-list">
 <ul>
-<li>Raise device volume, then open <b>Read Lesson</b>.</li>
-<li>Tap the blue 🔊 on any paragraph, or <b>Read All</b>, for smooth sweet English reading. Words highlight while spoken.</li>
+<li>Open <b>Read Lesson</b> to study each topic paragraph by paragraph.</li>
 <li><b>Activities</b> include every textbook task (map list, notes, discussions, comparison tables).</li>
 <li><b>Sources &amp; Enquiry</b> trains you to read travelogues, obituaries and memoirs like a historian.</li>
 <li><b>Unit Question Paper</b> can be printed or saved as PDF for exam practice.</li>
@@ -266,8 +263,18 @@ button, .btn-menu, .icon-btn, .option-btn, .quiz-opt, .match-item, .lesson-pick 
 
 <script>
 let audioCtx=null, masterGain=null, audioUnlocked=false, narratorTimer=null, narratorStop=false, lastWavUrl=null, keepAliveOsc=null;
-const SR=16000;
-const state={score:0,lives:5,stars:0,audioEnabled:true,currentSection:null,currentSub:null,lastChooseSection:null,visited:{},readingAll:false};
+/* Higher sample rate = clearer offline English in WebView / internal apps */
+const SR=22050;
+const state={score:0,lives:5,stars:0,audioEnabled:true,currentSection:null,currentSub:null,lastChooseSection:null,visited:{},readingAll:false,preferOffline:false};
+/* Auto-detect restricted WebView / internal app environments where system TTS is often silent */
+(function detectInternalApp(){
+  try{
+    const ua=(navigator.userAgent||'')+(navigator.vendor||'');
+    const isWV=/wv|WebView|Android.*Version\/[\d.]+.*Chrome\/|FB_IAB|Instagram|Line\/|TikTok|; ?wv\)/i.test(ua);
+    const noSpeech=!('speechSynthesis' in window);
+    if(isWV || noSpeech) state.preferOffline=true;
+  }catch(e){}
+})();
 
 let activeSource=null;
 function samplesToWavBytes(samples, sr){
@@ -359,7 +366,7 @@ function ensureCtx(){
   try{
     audioCtx=new AC();
     masterGain=audioCtx.createGain();
-    masterGain.gain.value=0.28;
+    masterGain.gain.value=0.95;
     masterGain.connect(audioCtx.destination);
   }catch(e){ audioCtx=null; }
   return audioCtx;
@@ -383,18 +390,26 @@ let speechWatchTimer=null;
 
 function unlockAudioEngine(){
   audioUnlocked=true;
-  const b=document.getElementById('soundBanner');
-  if(b){b.classList.add('on');b.classList.remove('show');b.innerText='🔊 Sound is ON — clear English reading is ready';}
   const ctx=ensureCtx();
-  if(ctx && ctx.state==='suspended' && ctx.resume) ctx.resume().catch(function(){});
+  if(ctx){
+    try{
+      if(ctx.state==='suspended' && ctx.resume) ctx.resume();
+      /* silent buffer to fully unlock Web Audio inside WebView */
+      const silent=ctx.createBuffer(1, 1, SR);
+      const src=ctx.createBufferSource();
+      src.buffer=silent;
+      src.connect(ctx.destination);
+      src.start(0);
+    }catch(e){}
+  }
   startKeepAlive();
   const v=document.getElementById('voicePlayer');
   const f=document.getElementById('fxPlayer');
   [v,f].forEach(function(el){
     if(!el) return;
-    try{ el.muted=false; el.volume=1; const pr=el.play(); if(pr&&pr.catch) pr.catch(function(){}); el.pause(); }catch(e){}
+    try{ el.muted=false; el.volume=1; const pr=el.play(); if(pr&&pr.catch) pr.catch(function(){}); el.pause(); el.currentTime=0; }catch(e){}
   });
-  if(hasSpeech()){
+  if(hasSpeech() && !state.preferOffline){
     try{
       window.speechSynthesis.cancel();
       const wake=new SpeechSynthesisUtterance('.');
@@ -405,11 +420,7 @@ function unlockAudioEngine(){
     warmVoices();
   }
 }
-function showSoundBannerIfNeeded(){
-  const b=document.getElementById('soundBanner');
-  if(!b) return;
-  if(!audioUnlocked) b.classList.add('show');
-}
+function showSoundBannerIfNeeded(){ /* sound banner removed */ }
 function playTone(freq,dur,type,vol){
   if(!state.audioEnabled) return;
   const samples=toneSamples(freq, dur||0.12, vol||0.32, type);
@@ -556,92 +567,251 @@ function splitIntoChunks(text, maxLen){
   if(buf.trim()) chunks.push(buf.trim());
   return chunks.length?chunks:[t];
 }
-/* Build list of clear sweet-voice audio URL candidates for a text chunk */
-function ttsAudioUrls(chunk){
-  const q=encodeURIComponent(chunk);
-  return [
-    'https://api.streamelements.com/kappa/v2/speech?voice=Amy&text='+q,
-    'https://api.streamelements.com/kappa/v2/speech?voice=Emma&text='+q,
-    'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en&q='+q
-  ];
+/* ========== OFFLINE English voice (Web Audio) — clearer & reliable in internal apps / WebView ========== */
+const PH={
+  a:[700,1200,2500], ae:[660,1720,2410], ah:[620,1220,2550], aw:[570,840,2410],
+  e:[530,1840,2480], eh:[610,1700,2520], i:[270,2290,3010], ih:[400,1920,2560],
+  o:[490,910,2450], oo:[300,870,2240], u:[350,1100,2410], uh:[520,1220,2500],
+  er:[490,1350,1690], ay:[480,1720,2500], oy:[480,900,2500], ow:[480,900,2400],
+  p:[0,0,0], b:[0,0,0], t:[0,0,0], d:[0,0,0], k:[0,0,0], g:[0,0,0],
+  f:[0,0,0], v:[0,0,0], s:[0,0,0], z:[0,0,0], sh:[0,0,0], h:[0,0,0],
+  m:[290,1170,0], n:[280,1390,0], l:[430,1200,2500], r:[490,1350,1690],
+  w:[300,610,2150], y:[280,2200,2600], th:[0,0,0], ch:[0,0,0], j:[0,0,0],
+  sil:[0,0,0]
+};
+const NOISE_PH={p:1,b:1,t:1,d:1,k:1,g:1,f:1,v:1,s:1,z:1,sh:1,h:1,th:1,ch:1,j:1};
+function engToPhones(word){
+  let w=String(word).toLowerCase().replace(/[^a-z']/g,'');
+  if(!w) return ['sil'];
+  /* Expanded dictionary for accurate Medieval India lesson words */
+  const dict={
+    the:['th','uh'], a:['uh'], an:['ae','n'], of:['uh','v'], to:['t','oo'],
+    and:['ae','n','d'], in:['ih','n'], on:['o','n'], for:['f','o','r'],
+    is:['ih','z'], was:['w','o','z'], were:['w','er'], are:['ah','r'],
+    india:['ih','n','d','i','uh'], mughal:['m','oo','g','uh','l'], mughals:['m','oo','g','uh','l','z'],
+    akbar:['ae','k','b','er'], babur:['b','ah','b','er'], humayun:['h','oo','m','ah','y','oo','n'],
+    delhi:['d','e','l','i'], hampi:['h','ae','m','p','i'], fort:['f','o','r','t'],
+    king:['k','ih','n','g'], battle:['b','ae','t','uh','l'], panipat:['p','ae','n','i','p','uh','t'],
+    peace:['p','i','s'], all:['aw','l'], temple:['t','e','m','p','uh','l'],
+    year:['y','ih','r'], built:['b','ih','l','t'], ruler:['r','oo','l','er'],
+    empire:['e','m','p','ay','er'], capital:['k','ae','p','ih','t','uh','l'],
+    religion:['r','ih','l','ih','j','uh','n'], army:['ah','r','m','i'],
+    land:['l','ae','n','d'], trade:['t','r','ay','d'], city:['s','ih','t','i'],
+    vijayanagara:['v','i','j','uh','y','uh','n','uh','g','uh','r','uh'],
+    krishna:['k','r','ih','sh','n','uh'], deva:['d','e','v','uh'], raya:['r','ah','y','uh'],
+    mansab:['m','ae','n','s','uh','b'], mansabdari:['m','ae','n','s','uh','b','d','ah','r','i'],
+    mansabdar:['m','ae','n','s','uh','b','d','ah','r'], sulh:['s','oo','l','h'], kul:['k','oo','l'],
+    jizyah:['j','ih','z','y','uh'], ibadat:['ih','b','ah','d','uh','t'], khana:['k','ah','n','uh'],
+    din:['d','ih','n'], ilahi:['ih','l','ah','h','i'], fatehpur:['f','uh','t','e','p','oo','r'],
+    sikri:['s','ih','k','r','i'], shah:['sh','ah'], jahan:['j','uh','h','ah','n'],
+    aurangzeb:['aw','r','uh','n','g','z','e','b'], jahangir:['j','uh','h','ah','n','g','ih','r'],
+    abul:['uh','b','oo','l'], fazl:['f','uh','z','uh','l'], barbosa:['b','ah','r','b','o','s','uh'],
+    domingopaes:['d','o','m','ih','n','g','o','p','ay','s'], ralph:['r','ae','l','f'],
+    fitch:['f','ih','ch'], haribara:['h','uh','r','ih','h','uh','r','uh'], bukka:['b','oo','k','uh'],
+    amara:['uh','m','ah','r','uh'], nayaka:['n','ah','y','uh','k','uh'], gopuram:['g','o','p','oo','r','uh','m'],
+    ashtadiggajas:['uh','sh','t','uh','d','ih','g','g','uh','j','uh','z'],
+    red:['r','e','d'], independence:['ih','n','d','ih','p','e','n','d','uh','n','s'],
+    national:['n','ae','sh','uh','n','uh','l'], flag:['f','l','ae','g'],
+    medieval:['m','e','d','i','i','v','uh','l'], kingdom:['k','ih','ng','d','uh','m'],
+    tolerance:['t','o','l','er','uh','n','s'], justice:['j','uh','s','t','ih','s'],
+    agriculture:['ae','g','r','ih','k','uh','l','ch','er'], culture:['k','uh','l','ch','er'],
+    administration:['ae','d','m','ih','n','ih','s','t','r','e','sh','uh','n'],
+    cavalry:['k','ae','v','uh','l','r','i'], officer:['o','f','ih','s','er'],
+    province:['p','r','o','v','ih','n','s'], village:['v','ih','l','ih','j'],
+    market:['m','ah','r','k','ih','t'], textile:['t','e','k','s','t','ay','l'],
+    persian:['p','er','zh','uh','n'], hindi:['h','ih','n','d','i'], urdu:['oo','r','d','oo'],
+    taj:['t','ah','j'], mahal:['m','uh','h','ah','l'], agra:['ah','g','r','uh'],
+    surat:['s','oo','r','uh','t'], lahore:['l','uh','h','o','r'], dhaka:['d','ah','k','uh'],
+    murshidabad:['m','oo','r','sh','ih','d','uh','b','ah','d'],
+    observed:['uh','b','z','er','v','d'], historical:['h','ih','s','t','o','r','ih','k','uh','l'],
+    relics:['r','e','l','ih','k','s'], belongs:['b','ih','l','o','n','g','z'],
+    ruled:['r','oo','l','d'], familiar:['f','uh','m','ih','l','yer'],
+    prime:['p','r','ay','m'], minister:['m','ih','n','ih','s','t','er'],
+    hoisting:['h','oy','s','t','ih','ng'], during:['d','oo','r','ih','ng'],
+    reign:['r','e','n'], emperor:['e','m','p','er','er'], existed:['ih','g','z','ih','s','t','ih','d'],
+    south:['s','aw','th'], means:['m','i','n','z'], victory:['v','ih','k','t','er','i'],
+    destroyed:['d','ih','s','t','r','oy','d'], popular:['p','o','p','y','uh','l','er'],
+    memory:['m','e','m','er','i'], colonel:['k','er','n','uh','l'], mackenzie:['m','uh','k','e','n','z','i'],
+    english:['ih','ng','g','l','ih','sh'], east:['i','s','t'], company:['k','uh','m','p','uh','n','i'],
+    discovered:['d','ih','s','k','uh','v','er','d'], ruins:['r','oo','ih','n','z']
+  };
+  if(dict[w]) return dict[w];
+  const out=[];
+  let i=0;
+  while(i<w.length){
+    const c2=w.substr(i,2), c3=w.substr(i,3);
+    if(c3==='tch'){ out.push('ch'); i+=3; continue; }
+    if(c2==='th'){ out.push('th'); i+=2; continue; }
+    if(c2==='sh'){ out.push('sh'); i+=2; continue; }
+    if(c2==='ch'){ out.push('ch'); i+=2; continue; }
+    if(c2==='ph'){ out.push('f'); i+=2; continue; }
+    if(c2==='wh'){ out.push('w'); i+=2; continue; }
+    if(c2==='qu'){ out.push('k'); out.push('w'); i+=2; continue; }
+    if(c2==='ng'){ out.push('n'); out.push('g'); i+=2; continue; }
+    if(c2==='ck'){ out.push('k'); i+=2; continue; }
+    if(c2==='ee'||c2==='ea'){ out.push('i'); i+=2; continue; }
+    if(c2==='oo'){ out.push('oo'); i+=2; continue; }
+    if(c2==='oa'||c2==='oe'){ out.push('o'); i+=2; continue; }
+    if(c2==='ai'||c2==='ay'){ out.push('ay'); i+=2; continue; }
+    if(c2==='oi'||c2==='oy'){ out.push('oy'); i+=2; continue; }
+    if(c2==='ou'||c2==='ow'){ out.push('ow'); i+=2; continue; }
+    if(c2==='au'||c2==='aw'){ out.push('aw'); i+=2; continue; }
+    if(c2==='er'||c2==='ir'||c2==='ur'){ out.push('er'); i+=2; continue; }
+    if(c2==='ar'){ out.push('ah'); out.push('r'); i+=2; continue; }
+    if(c2==='or'){ out.push('o'); out.push('r'); i+=2; continue; }
+    const c=w[i];
+    if(c==='a') out.push(i===w.length-1?'uh':'ae');
+    else if(c==='e') out.push(i===w.length-1?'':'eh');
+    else if(c==='i') out.push('ih');
+    else if(c==='o') out.push('o');
+    else if(c==='u') out.push('uh');
+    else if(c==='y') out.push(i===0?'y':'i');
+    else if('bcdfghjklmnpqrstvwxz'.indexOf(c)>=0){
+      if(c==='c') out.push((w[i+1]==='e'||w[i+1]==='i'||w[i+1]==='y')?'s':'k');
+      else if(c==='g') out.push((w[i+1]==='e'||w[i+1]==='i')?'j':'g');
+      else if(c==='x'){ out.push('k'); out.push('s'); }
+      else if(c==='q') out.push('k');
+      else out.push(c);
+    }
+    i++;
+  }
+  return out.length?out.filter(Boolean):['uh'];
 }
-function speakWithAudioTTS(text, paraEl, onend){
+function phoneSamples(ph, dur){
+  const n=Math.max(1, Math.floor(SR*(dur||0.09)));
+  const out=new Float32Array(n);
+  const f=PH[ph]||PH.uh;
+  const isNoise=!!NOISE_PH[ph];
+  const isSil=(ph==='sil'||ph===''||!ph);
+  if(isSil) return out;
+  const attack=Math.max(8, Math.floor(SR*0.008));
+  const release=Math.max(12, Math.floor(SR*0.012));
+  for(let i=0;i<n;i++){
+    const t=i/SR;
+    const env=Math.min(1, i/attack)*Math.min(1, (n-i)/release);
+    let s=0;
+    if(isNoise){
+      const noise=(Math.random()*2-1);
+      const bright=(ph==='s'||ph==='sh'||ph==='f'||ph==='th'||ph==='ch')?1.35:0.55;
+      s=noise*0.28*bright;
+      if(ph==='p'||ph==='t'||ph==='k'||ph==='ch'){
+        if(i<Math.floor(SR*0.018)) s=noise*0.55;
+        else s*=0.04;
+      }
+      if(ph==='h') s*=0.35;
+    } else {
+      /* clearer female-ish voice: stronger harmonics + slight vibrato */
+      const f0=168 + 3*Math.sin(2*Math.PI*4.5*t);
+      const buzz=Math.sin(2*Math.PI*f0*t) + 0.35*Math.sin(2*Math.PI*2*f0*t) + 0.12*Math.sin(2*Math.PI*3*f0*t);
+      const v1=Math.sin(2*Math.PI*f[0]*t)*0.58;
+      const v2=Math.sin(2*Math.PI*f[1]*t)*0.38;
+      const v3=f[2]?Math.sin(2*Math.PI*f[2]*t)*0.18:0;
+      s=(v1+v2+v3)*buzz*0.62;
+      if(ph==='m'||ph==='n') s*=0.75;
+      if(ph==='l'||ph==='r') s*=0.9;
+    }
+    out[i]=s*env*0.95;
+  }
+  return out;
+}
+function textToSpeechSamples(text){
+  const words=String(text).split(/(\s+)/);
+  const parts=[];
+  words.forEach(function(w){
+    if(/^\s+$/.test(w)){
+      parts.push(new Float32Array(Math.floor(SR*0.14)));
+      return;
+    }
+    if(!/[a-zA-Z]/.test(w)){
+      parts.push(new Float32Array(Math.floor(SR*0.09)));
+      return;
+    }
+    const phones=engToPhones(w);
+    phones.forEach(function(ph, idx){
+      let dur=0.085;
+      if(NOISE_PH[ph]) dur=0.055;
+      if(ph==='sil') dur=0.07;
+      if(idx===phones.length-1) dur+=0.025;
+      /* slightly slower for clarity in classroom use */
+      dur*=1.08;
+      parts.push(phoneSamples(ph, dur));
+    });
+    parts.push(new Float32Array(Math.floor(SR*0.07)));
+  });
+  return parts.length?concatSamples(parts):toneSamples(440,0.2,0.3);
+}
+function speakOffline(text, paraEl, onend){
   const full=String(text||'').trim();
   if(!full){ if(onend) onend(false); return; }
   const words=full.split(/(\s+)/).filter(function(s){ return s.length; });
   wrapWords(paraEl, words);
-  const chunks=splitIntoChunks(full, 200);
-  let ci=0;
-  let wordPtr=0;
-  let hlTimer=null;
 
-  function finish(ok){
-    if(hlTimer){ clearInterval(hlTimer); hlTimer=null; }
-    restoreParaText(paraEl);
-    if(onend) onend(!!ok);
-  }
-  function advanceHighlight(chunk){
-    if(hlTimer){ clearInterval(hlTimer); hlTimer=null; }
-    const cw=chunk.split(/(\s+)/).filter(function(s){ return s.length; });
-    let k=0;
-    const step=Math.max(160, Math.floor(1100/Math.max(1,cw.length)));
-    hlTimer=setInterval(function(){
-      if(narratorStop || k>=cw.length){ clearInterval(hlTimer); hlTimer=null; return; }
-      if(!/\s+/.test(cw[k])){
-        highlightWord(paraEl, wordPtr);
-        wordPtr++;
-      }
-      k++;
-    }, step);
-  }
-  function playChunkWithUrls(urls, ui){
-    if(narratorStop){ finish(false); return; }
-    if(ui>=urls.length){
-      /* all backends failed for this chunk — skip to next */
-      ci++;
-      if(ci>=chunks.length) finish(false);
-      else playNext();
-      return;
-    }
-    const audio=document.getElementById('voicePlayer');
-    if(!audio){ finish(false); return; }
-    activeAudioEl=audio;
-    audio.muted=false;
-    audio.volume=1;
-    try{ audio.playbackRate=0.96; }catch(e){}
-    const onOk=function(){
-      audio.onended=null; audio.onerror=null;
-      ci++;
-      if(narratorStop) finish(false);
-      else if(ci>=chunks.length) finish(true);
-      else setTimeout(playNext, 200);
-    };
-    const onFail=function(){
-      audio.onended=null; audio.onerror=null;
-      playChunkWithUrls(urls, ui+1);
-    };
-    audio.onended=onOk;
-    audio.onerror=onFail;
+  const samples=textToSpeechSamples(full);
+  const ctx=ensureCtx();
+  if(!ctx){
+    /* last resort: play via audio element as wav */
     try{
-      audio.src=urls[ui];
-      const p=audio.play();
-      if(p && p.catch) p.catch(onFail);
-    }catch(e){ onFail(); }
+      const uri=samplesToWavDataUri(samples, SR);
+      const el=document.getElementById('voicePlayer');
+      if(el){
+        el.src=uri; el.volume=1; el.muted=false;
+        activeAudioEl=el;
+        el.onended=function(){ restoreParaText(paraEl); if(onend) onend(true); };
+        el.play().catch(function(){ restoreParaText(paraEl); if(onend) onend(false); });
+        /* highlight while playing */
+        runOfflineHighlight(paraEl, words, samples.length/SR);
+        return;
+      }
+    }catch(e){}
+    restoreParaText(paraEl);
+    if(onend) onend(false);
+    return;
   }
-  function playNext(){
-    if(narratorStop){ finish(false); return; }
-    if(ci>=chunks.length){ finish(true); return; }
-    const chunk=chunks[ci];
-    advanceHighlight(chunk);
-    playChunkWithUrls(ttsAudioUrls(chunk), 0);
+  try{
+    if(ctx.state==='suspended' && ctx.resume) ctx.resume();
+    const buf=ctx.createBuffer(1, samples.length, SR);
+    buf.getChannelData(0).set(samples);
+    if(activeSource){ try{ activeSource.stop(0); }catch(e){} }
+    const src=ctx.createBufferSource();
+    const g=ctx.createGain();
+    /* Slightly louder for clearer classroom listening on phone speakers */
+    g.gain.value=1.15;
+    src.buffer=buf;
+    src.connect(g);
+    g.connect(masterGain||ctx.destination);
+    activeSource=src;
+    src.onended=function(){
+      if(activeSource===src) activeSource=null;
+      restoreParaText(paraEl);
+      if(onend) onend(!narratorStop);
+    };
+    src.start(0);
+    runOfflineHighlight(paraEl, words, samples.length/SR);
+  }catch(e){
+    restoreParaText(paraEl);
+    if(onend) onend(false);
   }
-  /* Start immediately (must stay in user-gesture chain for mobile WebView) */
-  playNext();
+}
+function runOfflineHighlight(paraEl, words, totalDur){
+  if(!paraEl || !words || !words.length) return;
+  const real=[];
+  words.forEach(function(w,i){ if(!/^\s+$/.test(w)) real.push(i); });
+  if(!real.length) return;
+  let k=0;
+  const step=Math.max(80, (totalDur*1000)/real.length);
+  if(narratorTimer){ try{ clearInterval(narratorTimer); }catch(e){} }
+  narratorTimer=setInterval(function(){
+    if(narratorStop || k>=real.length){
+      clearInterval(narratorTimer); narratorTimer=null; return;
+    }
+    highlightWord(paraEl, real[k]);
+    k++;
+  }, step);
 }
 function speakWithSystemTTS(text, paraEl, onend){
   const full=String(text||'').trim();
   if(!full){ if(onend) onend(false); return; }
-  if(!hasSpeech()){ speakWithAudioTTS(full, paraEl, onend); return; }
+  if(!hasSpeech()){ speakOffline(full, paraEl, onend); return; }
 
   const words=full.split(/(\s+)/).filter(function(s){ return s.length; });
   wrapWords(paraEl, words);
@@ -701,33 +871,29 @@ function speakWithSystemTTS(text, paraEl, onend){
       window.speechSynthesis.speak(u);
     }catch(e){ finish(false); }
   }
-  /* Speak IMMEDIATELY — do not wait for voices (user-gesture safe) */
   try{ window.speechSynthesis.cancel(); }catch(e){}
   speakNext();
 
-  /* If nothing starts within 1.2s, switch to clear online Amy voice */
+  /* Faster fallback for internal apps / WebView where system TTS often stays silent */
   speechWatchTimer=setTimeout(function(){
     if(narratorStop || finished) return;
     if(!started){
       try{ window.speechSynthesis.cancel(); }catch(e){}
       finished=true;
       if(narratorTimer){ clearInterval(narratorTimer); narratorTimer=null; }
-      speakWithAudioTTS(full, paraEl, onend);
+      speakOffline(full, paraEl, onend);
     }
-  }, 1200);
+  }, state.preferOffline ? 350 : 650);
 }
 function narrateText(text, paraEl, onend){
   const keepEnabled=state.audioEnabled;
   const keepAll=state.readingAll;
-  /* Soft stop previous without blocking new start */
   narratorStop=true;
   if(narratorTimer){ try{ clearInterval(narratorTimer); }catch(e){} try{ clearTimeout(narratorTimer); }catch(e){} narratorTimer=null; }
   if(speechWatchTimer){ try{ clearTimeout(speechWatchTimer); }catch(e){} speechWatchTimer=null; }
   if(activeSource){ try{ activeSource.stop(0); }catch(e){} activeSource=null; }
   if(hasSpeech()){ try{ window.speechSynthesis.cancel(); }catch(e){} }
-  if(activeAudioEl){
-    try{ activeAudioEl.pause(); }catch(e){}
-  }
+  if(activeAudioEl){ try{ activeAudioEl.pause(); }catch(e){} }
   document.querySelectorAll('.story-para.reading').forEach(function(el){ restoreParaText(el); });
 
   narratorStop=false;
@@ -735,10 +901,21 @@ function narrateText(text, paraEl, onend){
   state.audioEnabled=keepEnabled;
   if(!state.audioEnabled){ if(onend) onend(false); return; }
 
-  /* Unlock audio NOW inside the click gesture */
+  /* Unlock Web Audio INSIDE the click — required for internal WebView */
   audioUnlocked=true;
   const ctx=ensureCtx();
-  if(ctx && ctx.state==='suspended' && ctx.resume) ctx.resume().catch(function(){});
+  if(ctx){
+    try{
+      if(ctx.state==='suspended' && ctx.resume) ctx.resume();
+      /* extra silent unlock for stubborn WebViews */
+      const silent=ctx.createBuffer(1, 8, SR);
+      const src=ctx.createBufferSource();
+      src.buffer=silent;
+      src.connect(masterGain||ctx.destination);
+      src.start(0);
+    }catch(e){}
+  }
+  startKeepAlive();
   const vEl=document.getElementById('voicePlayer');
   if(vEl){ try{ vEl.muted=false; vEl.volume=1; }catch(e){} }
 
@@ -752,18 +929,18 @@ function narrateText(text, paraEl, onend){
     }
   }
 
-  /* Prefer clear sweet online voice first in internal apps; system TTS as parallel option */
-  if(hasSpeech()){
+  /* Internal apps / WebView: prefer reliable offline voice.
+     Browser: try system TTS first, fall back quickly if silent. */
+  if(state.preferOffline || !hasSpeech()){
+    speakOffline(clean, paraEl, onend);
+  } else {
     try{ pickEnglishVoice(); }catch(e){}
     speakWithSystemTTS(clean, paraEl, onend);
-  } else {
-    speakWithAudioTTS(clean, paraEl, onend);
   }
 }
 function speakText(text,onend){ narrateText(text, null, onend); }
 function toggleAudio(){
   state.audioEnabled=!state.audioEnabled;
-  document.getElementById('btnAudioToggle').innerText=state.audioEnabled?'🔊':'🔇';
   if(!state.audioEnabled) stopNarrator();
   else {
     unlockAudioEngine();
@@ -1112,60 +1289,14 @@ function renderRead(body,topicId){
   const lines=READ_CONTENTS[topicId]||[];
   const T=TOPICS.find(x=>x.id===topicId);
   body.innerHTML=`<div class="story-title-wrap"><span class="story-title">${T?T.title:''}</span></div>
-  <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:10px">
-  <button class="read-all-btn" id="readAllBtn" type="button">🔊 Read All / Stop</button>
-  </div>
-  <div class="note-box">Tap the blue 🔊 on any paragraph, or <b>Read All</b>, for smooth English reading. Raise device volume first.</div>
   <div id="storyParas"></div>`;
   const paras=document.getElementById('storyParas');
   lines.forEach((line,idx)=>{
     const div=document.createElement('div');
     div.className='story-para';
     div.id='para'+idx;
-    div.innerHTML=`<p>${line}</p><button type="button" class="mini-play" data-idx="${idx}" aria-label="Read paragraph">🔊</button>`;
+    div.innerHTML=`<p>${line}</p>`;
     paras.appendChild(div);
-    const btn=div.querySelector('.mini-play');
-    btn.addEventListener('click', function(ev){
-      ev.preventDefault();
-      ev.stopPropagation();
-      playSound('click');
-      unlockAudioEngine();
-      state.readingAll=false;
-      narrateText(line, div, function(){});
-    });
-  });
-  const readAllBtn=document.getElementById('readAllBtn');
-  readAllBtn.addEventListener('click', function(ev){
-    ev.preventDefault();
-    unlockAudioEngine();
-    if(state.readingAll){
-      stopNarrator();
-      this.innerText='🔊 Read All / Stop';
-      return;
-    }
-    state.readingAll=true;
-    this.innerText='⏹ Stop reading';
-    let pi=0;
-    function readNextPara(){
-      if(!state.readingAll || narratorStop || pi>=lines.length){
-        state.readingAll=false;
-        const b=document.getElementById('readAllBtn');
-        if(b) b.innerText='🔊 Read All / Stop';
-        return;
-      }
-      const div=document.getElementById('para'+pi);
-      const text=lines[pi];
-      pi++;
-      narrateText(text, div, function(ok){
-        if(state.readingAll && !narratorStop) setTimeout(readNextPara, 280);
-        else {
-          state.readingAll=false;
-          const b=document.getElementById('readAllBtn');
-          if(b) b.innerText='🔊 Read All / Stop';
-        }
-      });
-    }
-    readNextPara();
   });
 }
 function renderReadContent(body,topicId){ renderRead(body,topicId); }
@@ -1215,15 +1346,7 @@ function renderLearnContent(body,topicId){
   vocab.forEach(item=>{
     const card=document.createElement('div');
     card.className='word-card';
-    card.innerHTML=`<div class="card-emoji">📜</div><div class="word-eng">${item.word}</div><div class="word-meaning">${item.meaning}</div><button class="replay-btn">🔊 Listen</button>`;
-    const play=function(e){
-      if(e){ e.preventDefault(); e.stopPropagation(); }
-      playSound('click');
-      unlockAudioEngine();
-      narrateText(item.word+'. '+item.meaning, null, function(){});
-    };
-    card.addEventListener('click', play);
-    card.querySelector('.replay-btn').addEventListener('click', play);
+    card.innerHTML=`<div class="card-emoji">📜</div><div class="word-eng">${item.word}</div><div class="word-meaning">${item.meaning}</div>`;
     grid.appendChild(card);
   });
 }
@@ -1625,7 +1748,6 @@ function renderRoleplayContent(body,topicId){
   };
   body.innerHTML=`<div class="activity-heading">🎭 Role play</div>
   <div class="activity-block"><div class="activity-sub">${plays[topicId]||''}</div>
-  <button class="read-all-btn" onclick="unlockAudioEngine();narrateText(this.previousElementSibling.innerText.replace(/<[^>]+>/g,' '),null,function(){})">🔊 Listen to the dialogue</button>
   <p class="activity-sub">Practise in pairs. Add one extra line that a historian might speak from the side of the stage.</p>
   <textarea class="diary-area" placeholder="Historian: This dialogue is based on..."></textarea></div>`;
 }
@@ -1888,7 +2010,6 @@ function renderTimeline(){
       <div class="tl-item"><b>1857</b> — Formal end of Mughal rule mentioned in the lesson.</div>
     </div>
     <div class="note-box">Notice that Vijayanagara began earlier, overlapped with the early Mughals, and fell as a city in 1565 while Mughal power was still rising under Akbar.</div>
-    <button class="read-all-btn" onclick="unlockAudioEngine();narrateText('Thirteen thirty six, Vijayanagara founded. Fifteen twenty six, First Battle of Panipat. Fifteen seventy five, Ibadat Khana. Fifteen sixty five, Hampi city destroyed. Eighteen hundred, Mackenzie surveys the ruins.',null,function(){})">🔊 Hear the spine of the timeline</button>
   `;
 }
 
